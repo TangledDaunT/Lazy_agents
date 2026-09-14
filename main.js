@@ -9,7 +9,7 @@ let pyBridge;        // python/hermes_bridge.py subprocess (the Hermes API bridg
 let pyWakeword;      // python/wakeword_listener.py subprocess (offline wake-word engine)
 let wsClient;        // websocket connection into the python bridge
 
-const PY = process.env.PYTHON_BIN || 'python3';
+const PY = process.env.PYTHON_BIN || '/usr/bin/python3';
 const PYTHON_DIR = path.join(__dirname, 'python');
 
 function startBackend() {
