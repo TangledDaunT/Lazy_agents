@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"tertiary-fixed":"#6ffbbe","on-primary-container":"#6f5800","on-background":"#e4e1e8","secondary":"#7bd0ff","on-tertiary-container":"#006847","tertiary-fixed-dim":"#4edea3","primary":"#ffeec8","surface-variant":"#353439","on-secondary-fixed":"#001e2c","tertiary-container":"#5eecaf","on-tertiary-fixed":"#002113","primary-fixed-dim":"#e7c355","on-primary-fixed-variant":"#574500","surface-container-low":"#1b1b20","error-container":"#93000a","on-tertiary-fixed-variant":"#005236","primary-container":"#f5d061","on-primary":"#3d2f00","secondary-fixed-dim":"#7bd0ff","secondary-fixed":"#c4e7ff","on-secondary-fixed-variant":"#004c69","surface-bright":"#39393e","surface-container-high":"#2a292e","on-secondary-container":"#00374d","on-secondary":"#00354a","primary-fixed":"#ffe089","outline":"#99907d","surface-container-highest":"#353439","background":"#131317","on-surface":"#e4e1e8","on-error":"#690005","on-primary-fixed":"#241a00","on-surface-variant":"#d0c6b0","surface":"#131317","surface-tint":"#e7c355","surface-container-lowest":"#0e0e12","inverse-on-surface":"#303035","inverse-surface":"#e4e1e8","inverse-primary":"#735c00","surface-container":"#1f1f24","surface-dim":"#131317","on-tertiary":"#003824","outline-variant":"#4d4636","error":"#ffb4ab","tertiary":"#baffd9","secondary-container":"#00a6e0","on-error-container":"#ffdad6"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin":"1rem","space-md":"0.75rem","space-xl":"1.5rem","space-xs":"0.25rem","margin-window":"0.75rem","space-sm":"0.5rem","gutter-compact":"0.5rem","gutter":"0.75rem","space-lg":"1rem"},"fontFamily":{"code-sm":["Inter"],"headline-md":["Inter"],"display-lg":["Inter"],"body-lg":["Inter"],"label-caps":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"headline-lg":["Inter"],"headline-sm":["Inter"]},"fontSize":{"code-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"headline-md":["18px",{"lineHeight":"24px","letterSpacing":"-0.015em","fontWeight":"500"}],"display-lg":["32px",{"lineHeight":"38px","letterSpacing":"-0.025em","fontWeight":"600"}],"body-lg":["14px",{"lineHeight":"21px","letterSpacing":"-0.006em","fontWeight":"400"}],"label-caps":["10px",{"lineHeight":"12px","letterSpacing":"0.06em","fontWeight":"600"}],"body-md":["13px",{"lineHeight":"19px","letterSpacing":"-0.005em","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0em","fontWeight":"400"}],"headline-lg":["24px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-sm":["15px",{"lineHeight":"20px","letterSpacing":"-0.01em","fontWeight":"500"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface select-none"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.5)]"><div class="h-14 w-full px-margin-window flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs pl-space-xs"><span class="w-3 h-3 rounded-full bg-[#FF5F56] shadow-[0_0_6px_rgba(255,95,86,0.5)] inline-block"></span><span class="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-[0_0_6px_rgba(255,189,46,0.5)] inline-block"></span><span class="w-3 h-3 rounded-full bg-[#27C93F] shadow-[0_0_6px_rgba(27,201,63,0.5)] inline-block"></span></div><div class="flex items-center gap-space-sm pl-space-md"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-medium">Hermes Council</span><span class="bg-surface-container-high text-on-surface-variant font-code-sm text-code-sm px-space-sm py-0.5 rounded-full">v1.4 macOS</span><div class="flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed animate-pulse"></span><span class="font-label-caps text-label-caps uppercase tracking-wider text-tertiary-fixed">Council Active</span></div></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-low"><span class="w-2 h-2 rounded-full bg-tertiary-container shadow-[0_0_8px_rgba(94,236,175,0.6)]"></span><span class="font-code-sm text-code-sm text-on-surface-variant">Tailscale Active</span></div><div class="flex items-center bg-surface-container-lowest p-0.5 rounded-lg"><a class="px-space-md py-1 rounded font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-council-view" href="#">Arena</a><a class="px-space-md py-1 rounded font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="agent-detail-view" href="#">Agents</a><a class="px-space-md py-1 rounded font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="dashboard" href="#">Dashboard</a></div><a class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" data-path="dashboard" href="#" title="Settings & Council Config"><span class="material-symbols-outlined text-[18px]">settings</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_0_12px_rgba(245,208,97,0.3)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-lowest/80 backdrop-blur-xl z-40 flex flex-col justify-between p-space-md"><div class="flex flex-col gap-space-lg"><div class="px-space-sm pt-space-xs"><span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant">Navigation Deck</span></div><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-medium rounded-lg shadow-[0_0_14px_rgba(245,208,97,0.25)]"><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-council-view" href="#"><span class="material-symbols-outlined text-[20px]">hub</span><span class="font-body-md text-body-md">Council Arena</span></a><a class="flex items-center gap-space-md px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="agent-detail-view" href="#"><span class="material-symbols-outlined text-[20px]">smart_toy</span><span class="font-body-md text-body-md">Agent Specialists</span></a><a aria-current="page" class="flex items-center gap-space-md px-space-md py-2.5 transition-all bg-primary-container text-on-primary-container font-medium rounded-lg shadow-[0_0_14px_rgba(245,208,97,0.25)]" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-body-md text-body-md">Control Deck</span></a></nav></div><div class="p-space-sm rounded-xl bg-surface-container-low/60"><div class="flex items-center justify-between mb-space-xs"><span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Orchestration Pulse</span><span class="font-code-sm text-code-sm text-tertiary-fixed">42ms</span></div><div class="w-full h-1 rounded-full bg-surface-container-high overflow-hidden"><div class="w-3/4 h-full bg-gradient-to-r from-primary-container to-tertiary-container rounded-full"></div></div><div class="flex items-center justify-between mt-space-sm"><span class="font-code-sm text-code-sm text-on-surface-variant">Memory Core</span><span class="font-code-sm text-code-sm text-secondary">1.2 GB / 8 GB</span></div></div></aside><div class="pl-64"><main class="relative pt-14 w-full px-gutter min-h-screen bg-background"><div class="flex flex-col w-full pb-space-xl">
+<!-- Subtle Spatial Ambience Glow -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-24 right-1/4 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-48 left-12 w-80 h-80 bg-secondary/5 rounded-full blur-3xl pointer-events-none"></div>
+<!-- macOS Window Style Content Area -->
+<div class="w-full flex flex-col gap-space-lg">
+<!-- Breadcrumb & Control Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pt-space-xs">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">
+<span>System Settings</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary font-medium">Council Configuration</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Council Configuration</h1>
+</div>
+<!-- Live Gateway Connectivity Badge (macOS glass pill) -->
+<div class="flex items-center gap-space-md p-space-sm rounded-xl bg-surface-container-high/60 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-space-xs pl-1">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-tertiary-fixed shadow-[0_0_8px_rgba(111,251,190,0.8)]"></span>
+</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface font-medium flex items-center gap-1.5">
+                Connected via Tailscale
+                <span class="text-on-surface-variant font-code-sm text-code-sm font-normal">Mesh IP: 100.84.12.9</span>
+</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Hermes v1.4 Daemon Active</span>
+</div>
+</div>
+<div class="h-6 w-px bg-surface-variant"></div>
+<div class="flex items-center gap-1 px-space-xs py-0.5 rounded bg-surface-container-lowest/80 text-tertiary font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">speed</span>
+<span>18ms</span>
+</div>
+</div>
+</div>
+<!-- Main Desktop Two-Column Settings Pane -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-start">
+<!-- Left Settings Sidebar Pane (macOS System Preferences Category Style) -->
+<div class="lg:col-span-3 flex flex-col gap-space-xs bg-surface-container-low/70 backdrop-blur-xl rounded-xl p-space-sm shadow-md">
+<div class="px-space-sm py-1">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Preferences</span>
+</div>
+<!-- Nav Item: Agents (Active) -->
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg bg-surface-container-highest text-primary transition-colors text-left shadow-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-headline-sm text-headline-sm">Agents</span>
+</div>
+<span class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-2 py-0.5 rounded-full font-bold">5 active</span>
+</button>
+<!-- Nav Item: Voice & Wake Words -->
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-left">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+<span class="font-headline-sm text-headline-sm font-normal">Voice & Wake Words</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-outline-variant">chevron_right</span>
+</button>
+<!-- Nav Item: Appearance & Themes -->
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-left">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[18px]">palette</span>
+<span class="font-headline-sm text-headline-sm font-normal">Appearance & Skins</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-outline-variant">chevron_right</span>
+</button>
+<!-- Nav Item: Gateway & Tailscale -->
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-left">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[18px]">router</span>
+<span class="font-headline-sm text-headline-sm font-normal">Gateway & Tailscale</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed"></span>
+</button>
+<!-- Nav Item: Model Routing -->
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors text-left">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[18px]">schema</span>
+<span class="font-headline-sm text-headline-sm font-normal">Model Routing</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Llama 3.3</span>
+</button>
+<!-- Quick Hardware Info Footer Box inside Nav -->
+<div class="mt-space-lg p-space-sm rounded-lg bg-surface-container-lowest/70 flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase">Host Node</span>
+<span class="font-code-sm text-code-sm text-on-surface">Mac Studio M2 Max</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase">Audio Pipeline</span>
+<span class="font-code-sm text-code-sm text-secondary">CoreAudio Low-Lat</span>
+</div>
+</div>
+</div>
+<!-- Right Configuration Deck: 5 Translucent Glass Agent Cards -->
+<div class="lg:col-span-9 flex flex-col gap-space-md">
+<!-- CARD 1: HERMES (Orchestrator) -->
+<div class="relative group bg-surface-container-low/80 backdrop-blur-xl rounded-xl p-space-md shadow-md transition-all hover:bg-surface-container-low">
+<div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<!-- Left: Mascot + Identity + State Toggle -->
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center shadow-[0_0_20px_rgba(245,208,97,0.35)] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stylized gold minimalist 2D mascot head of Hermes the conductor, wearing sleek holographic visor with golden laurels on deep charcoal background, cinematic digital art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaPesoxjBZUfIqOoKSpVN2Q5KWG_cYIx-uGWmUwRMuxFjrwMc1oo1nKc884R3Yr9Ucd0Lj0UVudlZM-6E_xu1FuvoMQDJ2HvbaDid4geCrm3HZDib0MP2m19f7L8I5QQJq4R2QDL_DX50FZvGXcubHn8EweDC0G0x_c7gtTqQFe1nSfOc_P55_Fc8NrAoLhZohcDWDlE_as2qJzkLIPokmS6yHiZSvFpQAz5CB7_NFDXRzv0qZJMV23A"/>
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-primary-container ring-2 ring-surface-container-low flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-on-primary"></span>
+</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs">
+<input class="bg-surface-container-highest/60 hover:bg-surface-container-highest focus:bg-surface-container px-2.5 py-1 rounded font-headline-sm text-headline-sm text-primary tracking-tight outline-none focus:ring-1 focus:ring-primary-container transition-all" type="text" value="Hermes (Orchestrator)"/>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-primary-container/20 text-primary-fixed-dim">Council Lead</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant truncate">ID: agt_hermes_core_01 • Role: Synthesizer & Coordinator</span>
+</div>
+</div>
+<!-- Right: Quick Status Toggle -->
+<div class="flex items-center gap-space-md self-end xl:self-center">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active State</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-fixed after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Agent Fine-tuning Controls Sub-grid -->
+<div class="mt-space-md pt-space-md grid grid-cols-1 md:grid-cols-3 gap-space-md bg-surface-container-lowest/40 rounded-lg p-space-sm">
+<!-- Wake Word Field -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Wake Word & Trigger</label>
+<div class="flex items-center gap-space-xs bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg shadow-inner">
+<input class="bg-transparent font-code-sm text-code-sm text-on-surface outline-none w-full" type="text" value="Hey Hermes"/>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex-shrink-0" title="Test Mic Recognition">
+<span class="material-symbols-outlined text-[16px]">mic</span>
+</button>
+</div>
+</div>
+<!-- Voice Selector -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Voice Synthesis Engine</label>
+<div class="relative bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-primary">record_voice_over</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">ElevenLabs - Adam Warm Master</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<!-- Outfit / Visual Swatch -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Persona Wardrobe Swatch</label>
+<div class="flex items-center justify-between bg-surface-container-highest/80 p-1 rounded-lg">
+<button class="p-1 rounded bg-primary-container text-on-primary-container shadow-xs" title="Formal Suit">
+<span class="material-symbols-outlined text-[16px]">business_center</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Casual Hoodie">
+<span class="material-symbols-outlined text-[16px]">dry_cleaning</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Summer Tech">
+<span class="material-symbols-outlined text-[16px]">wb_sunny</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Cyber Armor">
+<span class="material-symbols-outlined text-[16px]">security</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Stealth">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- CARD 2: FORGE (Coder) -->
+<div class="relative group bg-surface-container-low/80 backdrop-blur-xl rounded-xl p-space-md shadow-md transition-all hover:bg-surface-container-low">
+<div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center shadow-[0_0_20px_rgba(123,208,255,0.35)] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stylized cyan minimalist 2D mascot head of Forge the software engineer robot, sharp angular visor with terminal code reflections on obsidian background, high tech illustration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC5JuKtE1bFaaonkZ4P2uXM2hHCa6niPRTbzKP9iULWgcqdKO50pVdwWyl56l5dY5q-7Y_r3zBYVpbmTsTwhWuhABj0Qwc_M0Qna9DQDr2GFVPVlMFPqmLiWDUc51MSbjrDsgH747IMVZpPS23SidgqjZkeJMT845kt4DrK__Kbp8kllu8yI0NEgLv4RBnqZPJ9fX6rtsQW1UZYy-k0vwvpNPChAThXoaJwLA15MH4YZqbcHo2etYlng"/>
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container-low flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-on-secondary"></span>
+</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs">
+<input class="bg-surface-container-highest/60 hover:bg-surface-container-highest focus:bg-surface-container px-2.5 py-1 rounded font-headline-sm text-headline-sm text-secondary tracking-tight outline-none focus:ring-1 focus:ring-secondary transition-all" type="text" value="Forge (Coder)"/>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-secondary/15 text-secondary">DevOps Specialist</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant truncate">ID: agt_forge_exec_02 • Role: Architecture & Code Synthesis</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md self-end xl:self-center">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active State</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary-fixed after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Agent Controls -->
+<div class="mt-space-md pt-space-md grid grid-cols-1 md:grid-cols-3 gap-space-md bg-surface-container-lowest/40 rounded-lg p-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Wake Word & Trigger</label>
+<div class="flex items-center gap-space-xs bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg shadow-inner">
+<input class="bg-transparent font-code-sm text-code-sm text-on-surface outline-none w-full" type="text" value="Hey Forge"/>
+<button class="text-on-surface-variant hover:text-secondary transition-colors flex-shrink-0" title="Test Mic Recognition">
+<span class="material-symbols-outlined text-[16px]">mic</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Voice Synthesis Engine</label>
+<div class="relative bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-secondary">record_voice_over</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">OpenAI - Echo Sharp</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Persona Wardrobe Swatch</label>
+<div class="flex items-center justify-between bg-surface-container-highest/80 p-1 rounded-lg">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Formal Suit">
+<span class="material-symbols-outlined text-[16px]">business_center</span>
+</button>
+<button class="p-1 rounded bg-secondary text-on-secondary shadow-xs" title="Casual Hoodie">
+<span class="material-symbols-outlined text-[16px]">dry_cleaning</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Summer Tech">
+<span class="material-symbols-outlined text-[16px]">wb_sunny</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Cyber Armor">
+<span class="material-symbols-outlined text-[16px]">security</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Stealth">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- CARD 3: LEDGER (Financials) -->
+<div class="relative group bg-surface-container-low/80 backdrop-blur-xl rounded-xl p-space-md shadow-md transition-all hover:bg-surface-container-low">
+<div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center shadow-[0_0_20px_rgba(111,251,190,0.3)] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stylized mint green minimalist 2D mascot head of Ledger the financial analyst owl, monocular lens with stock ticker holographic data, crisp digital line art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_3-HelDxxF7vy0ONo3KpVaQA-aXoJBYOxST3kIfE1tsg6kZxOPHHtB3B3L6_pqBCv5yYgiV_3hcviAPtJyiYUGgKv1_KapYKS6j0uShfZ3_hJnqD6cK_6vVHfwW2vmy-g52v18lSXnQT22H_dysV-fBFeYm3kTOkSoFJ6ggUjxD5vyZYUk4056lplTM6jXHv2TJhCeOvOIotIJtWjA514WL6ONc-ejiCz3TqmXF9et0iRaC6meGVyVA"/>
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-tertiary-fixed ring-2 ring-surface-container-low flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed"></span>
+</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs">
+<input class="bg-surface-container-highest/60 hover:bg-surface-container-highest focus:bg-surface-container px-2.5 py-1 rounded font-headline-sm text-headline-sm text-tertiary-fixed-dim tracking-tight outline-none focus:ring-1 focus:ring-tertiary-fixed transition-all" type="text" value="Ledger (Financials)"/>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary">Quantitative Logic</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant truncate">ID: agt_ledger_math_03 • Role: Treasury & Cost Auditing</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md self-end xl:self-center">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active State</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-tertiary-fixed after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary-fixed"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Agent Controls -->
+<div class="mt-space-md pt-space-md grid grid-cols-1 md:grid-cols-3 gap-space-md bg-surface-container-lowest/40 rounded-lg p-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Wake Word & Trigger</label>
+<div class="flex items-center gap-space-xs bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg shadow-inner">
+<input class="bg-transparent font-code-sm text-code-sm text-on-surface outline-none w-full" type="text" value="Hey Ledger"/>
+<button class="text-on-surface-variant hover:text-tertiary-fixed transition-colors flex-shrink-0" title="Test Mic Recognition">
+<span class="material-symbols-outlined text-[16px]">mic</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Voice Synthesis Engine</label>
+<div class="relative bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">record_voice_over</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">Azure - Clara British</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Persona Wardrobe Swatch</label>
+<div class="flex items-center justify-between bg-surface-container-highest/80 p-1 rounded-lg">
+<button class="p-1 rounded bg-tertiary-fixed text-on-tertiary-fixed shadow-xs" title="Formal Suit">
+<span class="material-symbols-outlined text-[16px]">business_center</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Casual Hoodie">
+<span class="material-symbols-outlined text-[16px]">dry_cleaning</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Summer Tech">
+<span class="material-symbols-outlined text-[16px]">wb_sunny</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Cyber Armor">
+<span class="material-symbols-outlined text-[16px]">security</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Stealth">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- CARD 4: ORACLE (Research) -->
+<div class="relative group bg-surface-container-low/80 backdrop-blur-xl rounded-xl p-space-md shadow-md transition-all hover:bg-surface-container-low">
+<div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center shadow-[0_0_20px_rgba(200,160,255,0.3)] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stylized violet minimalist 2D mascot head of Oracle the research seer, celestial star third-eye optics with smooth gradient geometric contours on dark glass background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwNry9zG38VxxJjEwqRAdrjcI0tjZCxPu0J0iCby-qKOqsjzKbpenSHqCNpcLX5-iNbXE7I7wX9-Wtr_wLnxFdTknnsxdM3Jom5ge5HxFh-8nW3vPWEkeuQZcKift_e-EM0pMOaZkA-7OYYdp1jSkRQCSARzU1OD_O7ZNko8M1FBa4fs1RMVi-QSZBvr7R2BQoEBj6nLrWS2xOBSvop40Ym9SZ_Cy4wlUTzEy3KJ1d2J1fO7mD6gvDVA"/>
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary-fixed ring-2 ring-surface-container-low flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-on-secondary-fixed"></span>
+</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs">
+<input class="bg-surface-container-highest/60 hover:bg-surface-container-highest focus:bg-surface-container px-2.5 py-1 rounded font-headline-sm text-headline-sm text-secondary-fixed tracking-tight outline-none focus:ring-1 focus:ring-secondary-fixed transition-all" type="text" value="Oracle (Research)"/>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-secondary-fixed/15 text-secondary-fixed">Deep Crawl</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant truncate">ID: agt_oracle_scout_04 • Role: Retrieval Augmented Sourcing</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md self-end xl:self-center">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active State</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary-fixed after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary-fixed"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Agent Controls -->
+<div class="mt-space-md pt-space-md grid grid-cols-1 md:grid-cols-3 gap-space-md bg-surface-container-lowest/40 rounded-lg p-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Wake Word & Trigger</label>
+<div class="flex items-center gap-space-xs bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg shadow-inner">
+<input class="bg-transparent font-code-sm text-code-sm text-on-surface outline-none w-full" type="text" value="Hey Oracle"/>
+<button class="text-on-surface-variant hover:text-secondary-fixed transition-colors flex-shrink-0" title="Test Mic Recognition">
+<span class="material-symbols-outlined text-[16px]">mic</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Voice Synthesis Engine</label>
+<div class="relative bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-secondary-fixed">record_voice_over</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">ElevenLabs - Antoni Analytic</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Persona Wardrobe Swatch</label>
+<div class="flex items-center justify-between bg-surface-container-highest/80 p-1 rounded-lg">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Formal Suit">
+<span class="material-symbols-outlined text-[16px]">business_center</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Casual Hoodie">
+<span class="material-symbols-outlined text-[16px]">dry_cleaning</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Summer Tech">
+<span class="material-symbols-outlined text-[16px]">wb_sunny</span>
+</button>
+<button class="p-1 rounded bg-secondary-fixed text-on-secondary-fixed shadow-xs" title="Cyber Armor">
+<span class="material-symbols-outlined text-[16px]">security</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Stealth">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- CARD 5: CHRONOS (Planner) -->
+<div class="relative group bg-surface-container-low/80 backdrop-blur-xl rounded-xl p-space-md shadow-md transition-all hover:bg-surface-container-low">
+<div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative flex-shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center shadow-[0_0_20px_rgba(255,180,171,0.25)] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stylized coral orange minimalist 2D mascot head of Chronos the timeline planner, futuristic hour-glass visor geometry with spinning orbital rings, sleek dark desktop graphic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhYaC4GY63fvzKQIMVbietB1HBZZU1IAA9hzsEWoZZjLUcMregrV7HQHZAwLCrd1DzP7hetlfQnKP65ADoNyIOgfpXCl6Gocpn-Hhpr3Afdz7INTUP79UaYWG-gKHhxr9-CXsOKvLAhsE1HaCHroI-eETA4OW_S5JIB-c3fmrg4-lNm_h7yZCFpdgO-qWSLiUo3WkQnXukQsjLwYdPtpPGaFnSOBoAEw5Ko8vthXBDK9gmiKMVmdbbDA"/>
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-error ring-2 ring-surface-container-low flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-on-error"></span>
+</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs">
+<input class="bg-surface-container-highest/60 hover:bg-surface-container-highest focus:bg-surface-container px-2.5 py-1 rounded font-headline-sm text-headline-sm text-error tracking-tight outline-none focus:ring-1 focus:ring-error transition-all" type="text" value="Chronos (Planner)"/>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-error-container/40 text-error">Temporal Matrix</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant truncate">ID: agt_chronos_time_05 • Role: Scheduling & Dependency Trees</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md self-end xl:self-center">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active State</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-error after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-error"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Agent Controls -->
+<div class="mt-space-md pt-space-md grid grid-cols-1 md:grid-cols-3 gap-space-md bg-surface-container-lowest/40 rounded-lg p-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Wake Word & Trigger</label>
+<div class="flex items-center gap-space-xs bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg shadow-inner">
+<input class="bg-transparent font-code-sm text-code-sm text-on-surface outline-none w-full" type="text" value="Hey Chronos"/>
+<button class="text-on-surface-variant hover:text-error transition-colors flex-shrink-0" title="Test Mic Recognition">
+<span class="material-symbols-outlined text-[16px]">mic</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Voice Synthesis Engine</label>
+<div class="relative bg-surface-container-highest/80 px-2.5 py-1.5 rounded-lg flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-error">record_voice_over</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">Custom - Nova Kinetic</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Persona Wardrobe Swatch</label>
+<div class="flex items-center justify-between bg-surface-container-highest/80 p-1 rounded-lg">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Formal Suit">
+<span class="material-symbols-outlined text-[16px]">business_center</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Casual Hoodie">
+<span class="material-symbols-outlined text-[16px]">dry_cleaning</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Summer Tech">
+<span class="material-symbols-outlined text-[16px]">wb_sunny</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Cyber Armor">
+<span class="material-symbols-outlined text-[16px]">security</span>
+</button>
+<button class="p-1 rounded bg-error text-on-error shadow-xs" title="Stealth">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky / Anchored Footer Action Bar (macOS System Settings Sheet Paradigm) -->
+<div class="sticky bottom-4 z-30 w-full mt-space-md p-space-md rounded-xl bg-surface-container-lowest/85 backdrop-blur-2xl shadow-xl flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<!-- Status indicator left -->
+<div class="flex items-center gap-space-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-primary">cloud_sync</span>
+<span class="font-body-sm text-body-sm">
+            5/5 Agents synchronized with local Tailscale node
+          </span>
+</div>
+<!-- Buttons Right -->
+<div class="flex items-center gap-space-sm w-full sm:w-auto justify-end">
+<button class="px-space-md py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-body-sm text-body-sm transition-all active:scale-95">
+            Reset to Defaults
+          </button>
+<button class="flex items-center gap-space-xs px-space-lg py-2 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-medium shadow-[0_0_16px_rgba(245,208,97,0.35)] hover:bg-primary hover:text-on-primary transition-all active:scale-95" id="applySyncBtn">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+<span>Apply & Sync to Gateway</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for Apply button feedback
+  document.getElementById('applySyncBtn')?.addEventListener('click', function() {
+    const originalText = this.innerHTML;
+    this.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Syncing...</span>';
+    setTimeout(() => {
+      this.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span><span>Synced to Gateway</span>';
+      setTimeout(() => {
+        this.innerHTML = originalText;
+      }, 2000);
+    }, 600);
+  });
+</script></main></div></body></html>
