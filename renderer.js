@@ -217,7 +217,12 @@ async function sendMessage() {
   if (result?.error) { renderOutput(`Connection error: ${result.error}`, true); addActivity(result.error, 'error'); }
 }
 
-document.getElementById('dashboard-btn').addEventListener('click', () => {
+document.getElementById('settings-btn')?.addEventListener('click', () => {
+    window.hermes.openSettings();
+  });
+  
+  // Legacy
+  document.getElementById('dashboard-btn')?.addEventListener('click', () => {
   window.hermes.openDashboard();
 });
 document.getElementById('clear-btn')?.addEventListener('click', () => {

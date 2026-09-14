@@ -523,3 +523,10 @@ if __name__ == "__main__":
     print(f"[hermes_bridge] Starting on port {BRIDGE_PORT}")
     print(f"[hermes_bridge] Connecting to Hermes gateway at {HERMES_GATEWAY_URL}")
     uvicorn.run(app, host="0.0.0.0", port=BRIDGE_PORT)
+
+
+@app.post("/restart")
+async def restart_bridge():
+    """Signal to restart the bridge."""
+    await broadcast({"type": "bridge_restarting"})
+    return {"status": "restarting"}
