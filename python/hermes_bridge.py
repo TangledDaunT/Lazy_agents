@@ -530,3 +530,20 @@ async def restart_bridge():
     """Signal to restart the bridge."""
     await broadcast({"type": "bridge_restarting"})
     return {"status": "restarting"}
+
+
+@app.get("/vault/settings")
+async def get_vault_settings():
+    """Get current vault path setting."""
+    return {"vault_path": str(VAULT_DIR), "exists": VAULT_DIR.exists()}
+
+
+@app.post("/vault/settings")
+async def set_vault_settings(settings: dict):
+    """Update vault path."""
+    global VAULT_DIR
+    new_path = settings.get("vault_path")
+    if new_path:
+        VAULT_DIR = Path(new_path)
+        return {"ok": True, "vault_path": str(VAULT_DIR)}
+    return {"error": "No path provided"}

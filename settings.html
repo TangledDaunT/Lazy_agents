@@ -307,6 +307,28 @@
     <button id="save-settings" class="btn-save">Save Settings</button>
     <button id="restart-bridge" class="btn-test" style="padding: 12px 24px;">Restart Bridge</button>
   </div>
+
+  <!-- Obsidian Vault -->
+  <div class="settings-section">
+    <h2>Obsidian Vault</h2>
+    <div class="setting-row">
+      <div class="setting-label">
+        <h3>Vault Path</h3>
+        <p>Path to your Obsidian vault directory</p>
+      </div>
+      <div class="setting-input">
+        <input type="text" id="vault-path" placeholder="~/Documents/Obsidian/MyVault">
+        <button id="browse-vault" class="btn-test" style="margin-left: 10px;">Browse</button>
+      </div>
+    </div>
+    <div class="setting-row">
+      <div class="setting-label">
+        <h3>Sync Notes</h3>
+        <p>Automatically sync vault notes to context</p>
+      </div>
+      <div id="toggle-vault-sync" class="toggle-switch"></div>
+    </div>
+  </div>
 </div>
 
 <script>
