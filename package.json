@@ -5,7 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\""
+    "test": "echo \"Error: no test specified\"",
+    "build:assets": "node scripts/build-mascots.js",
+    "generate:mascots": "cd assets/mascots && ../../venv/bin/python generate_mascots.py",
+    "test:visual": "electron tests/visual-test.js"
   },
   "repository": {
     "type": "git",
