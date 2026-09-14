@@ -2,490 +2,352 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings - Lazy Agents</title>
-<link rel="stylesheet" href="style.css">
 <style>
-.settings-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-.settings-section {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
-}
-.settings-section h2 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--foreground);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.settings-section h2::before {
-  content: '';
-  width: 4px;
-  height: 20px;
-  background: var(--accent);
-  border-radius: 2px;
-}
-.setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.setting-row:last-child {
-  border-bottom: none;
-}
-.setting-label {
-  flex: 1;
-}
-.setting-label h3 {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-.setting-label p {
-  font-size: 12px;
-  color: var(--muted-foreground);
-}
-.setting-input {
-  flex: 1;
-  max-width: 300px;
-}
-.setting-input input,
-.setting-input select {
-  width: 100%;
-  padding: 10px 14px;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--foreground);
-  font-size: 14px;
-}
-.setting-input input:focus,
-.setting-input select:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-.toggle-switch {
-  position: relative;
-  width: 48px;
-  height: 26px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 13px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.toggle-switch.active {
-  background: var(--accent);
-}
-.toggle-switch::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: white;
-  border-radius: 50%;
-  top: 3px;
-  left: 3px;
-  transition: transform 0.2s;
-}
-.toggle-switch.active::after {
-  transform: translateX(22px);
-}
-.btn-save {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.btn-save:hover {
-  opacity: 0.9;
-}
-.btn-test {
-  padding: 10px 16px;
-  background: rgba(255,255,255,0.1);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-.btn-test:hover {
-  background: rgba(255,255,255,0.15);
-}
-.status-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-}
-.status-indicator.connected {
-  background: rgba(34,197,94,0.2);
-  color: #22c55e;
-}
-.status-indicator.disconnected {
-  background: rgba(239,68,68,0.2);
-  color: #ef4444;
-}
-.status-indicator::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-}
-.agent-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
-}
-.agent-card {
-  background: rgba(0,0,0,0.2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-}
-.agent-card h4 {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-.agent-card p {
-  font-size: 11px;
-  color: var(--muted-foreground);
-  margin-bottom: 8px;
-}
-.agent-card select {
-  width: 100%;
-  padding: 6px 10px;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--foreground);
-  font-size: 12px;
-}
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted-foreground);
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-.back-btn:hover {
-  color: var(--foreground);
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #0e0e12;
+    --surface: #18181d;
+    --line: rgba(255,255,255,0.1);
+    --accent: #f5d061;
+    --text: #e4e1e8;
+    --muted: rgba(228,225,232,0.6);
+    --green: #6ffbbe;
+    --red: #ff6b6b;
+  }
+  
+  body {
+    font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 40px;
+    line-height: 1.6;
+  }
+  
+  h1 { font-size: 28px; margin-bottom: 30px; font-weight: 700; letter-spacing: -0.5px; }
+  
+  .back-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .back-btn:hover { background: #ffd700; }
+  
+  section {
+    background: var(--surface);
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+  
+  h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+  }
+  
+  .field { margin-bottom: 16px; }
+  
+  label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--line);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  
+  .hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  
+  button.primary {
+    padding: 14px 28px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  button.primary:hover { background: #ffd700; transform: translateY(-1px); }
+  button.primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  
+  .test-btn {
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+  .test-btn:hover { background: rgba(255,255,255,0.1); }
+  
+  .status { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .status.ok { background: rgba(111,251,190,0.1); color: var(--green); }
+  .status.error { background: rgba(255,107,107,0.1); color: var(--red); }
+  
+  .agents-config {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .agent-card {
+    background: rgba(0,0,0,0.2);
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  
+  .agent-card h3 { font-size: 14px; margin-bottom: 8px; }
+  .agent-card small { color: var(--muted); }
+  
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 28px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 13px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  .toast.success { border-color: var(--green); }
 </style>
 </head>
 <body>
-<div class="settings-container">
-  <a href="index.html" class="back-btn">← Back to App</a>
+
+<button class="back-btn" onclick="window.hermes?.openSettings ? window.close() : window.close()">← Back to App</button>
+
+<h1>⚙️ Settings</h1>
+
+<section>
+  <h2>🔌 Hermes Gateway</h2>
   
-  <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Settings</h1>
-  <p style="color: var(--muted-foreground); margin-bottom: 32px;">Configure your Lazy Agents connection and preferences</p>
-
-  <!-- Connection Status -->
-  <div class="settings-section">
-    <h2>Hermes Connection</h2>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Status</h3>
-        <p>Connection to Hermes Gateway</p>
-      </div>
-      <div>
-        <span id="connection-status" class="status-indicator disconnected">Disconnected</span>
-        <button id="test-connection" class="btn-test">Test</button>
-      </div>
+  <div class="field">
+    <label for="gatewayUrl">Gateway URL</label>
+    <div style="display: flex; align-items: center;">
+      <input type="text" id="gatewayUrl" placeholder="http://100.99.161.57:8642">
+      <button class="test-btn" id="testGatewayBtn">Test</button>
     </div>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Gateway URL</h3>
-        <p>Hermes Gateway API endpoint</p>
-      </div>
-      <div class="setting-input">
-        <input type="text" id="gateway-url" placeholder="http://localhost:8642">
-      </div>
-    </div>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>API Key</h3>
-        <p>Authentication key for Hermes API</p>
-      </div>
-      <div class="setting-input">
-        <input type="password" id="api-key" placeholder="Enter API key">
-      </div>
-    </div>
+    <span id="gatewayStatus" class="status"></span>
+    <p class="hint">Use your Tailscale IP for remote connection</p>
   </div>
-
-  <!-- Agent Profiles -->
-  <div class="settings-section">
-    <h2>Agent Profiles</h2>
-    <p style="font-size: 13px; color: var(--muted-foreground); margin-bottom: 16px;">
-      Each agent can be assigned a Hermes profile with specific behavior and personality.
-    </p>
-    <div id="agent-profiles" class="agent-list">
-      <!-- Populated by JavaScript -->
-    </div>
+  
+  <div class="field">
+    <label for="apiKey">API Key</label>
+    <input type="password" id="apiKey" placeholder="Your Hermes API key">
+    <p class="hint">Found in ~/.hermes/.env or create via `hermes gateway`</p>
   </div>
+</section>
 
-  <!-- App Settings -->
-  <div class="settings-section">
-    <h2>App Preferences</h2>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Auto-start Bridge</h3>
-        <p>Automatically start Python bridge on app launch</p>
-      </div>
-      <div id="toggle-autostart" class="toggle-switch active"></div>
-    </div>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Wake Word Detection</h3>
-        <p>Enable voice activation with wake words</p>
-      </div>
-      <div id="toggle-wakeword" class="toggle-switch"></div>
-    </div>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Theme</h3>
-        <p>Application color scheme</p>
-      </div>
-      <div class="setting-input">
-        <select id="theme-select">
-          <option value="dark">Dark</option>
-          <option value="light">Light</option>
-          <option value="system">System</option>
-        </select>
-      </div>
-    </div>
+<section>
+  <h2>🌉 Bridge Server</h2>
+  
+  <div class="field">
+    <label for="bridgePort">Bridge Port</label>
+    <input type="number" id="bridgePort" value="8766" min="1024" max="65535">
+    <p class="hint">Local WebSocket port for Electron ↔ Python communication</p>
   </div>
+  
+  <div class="field">
+    <label class="checkbox-label">
+      <input type="checkbox" id="autoStart">
+      <span>Auto-start bridge on app launch</span>
+    </label>
+  </div>
+</section>
 
-  <!-- Debug -->
-  <div class="settings-section">
-    <h2>Debug & Logs</h2>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Bridge Port</h3>
-        <p>WebSocket server port for local bridge</p>
-      </div>
-      <div class="setting-input">
-        <input type="number" id="bridge-port" value="8766">
-      </div>
-    </div>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Debug Mode</h3>
-        <p>Enable verbose logging to console</p>
-      </div>
-      <div id="toggle-debug" class="toggle-switch"></div>
-    </div>
+<section>
+  <h2>🎤 Voice & Wake Word</h2>
+  
+  <div class="field">
+    <label class="checkbox-label">
+      <input type="checkbox" id="wakeWord">
+      <span>Enable wake word detection</span>
+    </label>
+    <p class="hint">Requires Porcupine/Picovoice setup (see documentation)</p>
   </div>
+</section>
 
-  <div style="margin-top: 32px; display: flex; gap: 12px;">
-    <button id="save-settings" class="btn-save">Save Settings</button>
-    <button id="restart-bridge" class="btn-test" style="padding: 12px 24px;">Restart Bridge</button>
+<section>
+  <h2>📚 Obsidian Vault</h2>
+  
+  <div class="field">
+    <label for="vaultPath">Vault Path</label>
+    <input type="text" id="vaultPath" placeholder="/Users/shreyansh/Documents/Obsidian/MyVault">
+    <p class="hint">Path to your Obsidian vault directory</p>
   </div>
+</section>
 
-  <!-- Obsidian Vault -->
-  <div class="settings-section">
-    <h2>Obsidian Vault</h2>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Vault Path</h3>
-        <p>Path to your Obsidian vault directory</p>
-      </div>
-      <div class="setting-input">
-        <input type="text" id="vault-path" placeholder="~/Documents/Obsidian/MyVault">
-        <button id="browse-vault" class="btn-test" style="margin-left: 10px;">Browse</button>
-      </div>
-    </div>
-    <div class="setting-row">
-      <div class="setting-label">
-        <h3>Sync Notes</h3>
-        <p>Automatically sync vault notes to context</p>
-      </div>
-      <div id="toggle-vault-sync" class="toggle-switch"></div>
-    </div>
+<section>
+  <h2>👥 Agent Profiles</h2>
+  <p class="hint" style="margin-bottom: 16px;">Each agent routes to a specific Hermes profile for proper session isolation</p>
+  
+  <div id="agentsGrid" class="agents-config"></div>
+</section>
+
+<section>
+  <h2>🔧 Advanced</h2>
+  
+  <div class="field">
+    <label class="checkbox-label">
+      <input type="checkbox" id="debug">
+      <span>Debug mode (verbose logging)</span>
+    </label>
   </div>
+</section>
+
+<div style="margin-top: 30px;">
+  <button class="primary" id="saveBtn">Save Settings</button>
 </div>
 
+<div id="toast" class="toast"></div>
+
 <script>
-const DEFAULT_SETTINGS = {
-  gatewayUrl: 'http://localhost:8642',
-  apiKey: '',
-  bridgePort: 8766,
-  autoStart: true,
-  wakeWord: false,
-  theme: 'dark',
-  debug: false,
-  agentProfiles: {}
+const $ = id => document.getElementById(id);
+const toast = msg => {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show', 'success');
+  setTimeout(() => t.classList.remove('show', 'success'), 3000);
 };
 
-let settings = { ...DEFAULT_SETTINGS };
-
-async function loadSettings() {
+async function load() {
   try {
-    const stored = localStorage.getItem('lazy-agents-settings');
-    if (stored) {
-      settings = { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
-    }
-  } catch (e) {}
-  
-  // Load from bridge if available
-  try {
-    const res = await fetch(`http://localhost:${settings.bridgePort}/health`);
-    if (res.ok) {
-      const data = await res.json();
-      document.getElementById('gateway-url').value = data.gateway_url || settings.gatewayUrl;
-      updateConnectionStatus(true);
-    }
-  } catch (e) {
-    updateConnectionStatus(false);
-  }
-  
-  applySettings();
-}
-
-function applySettings() {
-  document.getElementById('gateway-url').value = settings.gatewayUrl;
-  document.getElementById('api-key').value = settings.apiKey;
-  document.getElementById('bridge-port').value = settings.bridgePort;
-  document.getElementById('theme-select').value = settings.theme;
-  
-  document.getElementById('toggle-autostart').classList.toggle('active', settings.autoStart);
-  document.getElementById('toggle-wakeword').classList.toggle('active', settings.wakeWord);
-  document.getElementById('toggle-debug').classList.toggle('active', settings.debug);
-  
-  loadAgentProfiles();
-}
-
-async function loadAgentProfiles() {
-  const container = document.getElementById('agent-profiles');
-  container.innerHTML = '';
-  
-  try {
-    const res = await fetch(`http://localhost:${settings.bridgePort}/agents`);
-    const data = await res.json();
+    const settings = await window.hermes.getSettings();
+    $('gatewayUrl').value = settings.gatewayUrl || '';
+    $('apiKey').value = settings.apiKey || '';
+    $('bridgePort').value = settings.bridgePort || 8766;
+    $('autoStart').checked = settings.autoStart;
+    $('wakeWord').checked = settings.wakeWord;
+    $('debug').checked = settings.debug;
+    $('vaultPath').value = settings.vaultPath || '';
     
-    data.agents.forEach(agentId => {
-      const card = document.createElement('div');
-      card.className = 'agent-card';
-      card.innerHTML = `
-        <h4>${agentId.charAt(0).toUpperCase() + agentId.slice(1)}</h4>
-        <p>Profile: ${settings.agentProfiles[agentId] || 'default'}</p>
-        <select data-agent="${agentId}">
-          <option value="default" ${settings.agentProfiles[agentId] === 'default' ? 'selected' : ''}>Default</option>
-          <option value="byte" ${settings.agentProfiles[agentId] === 'byte' ? 'selected' : ''}>Byte</option>
-          <option value="ledger" ${settings.agentProfiles[agentId] === 'ledger' ? 'selected' : ''}>Ledger</option>
-          <option value="sage" ${settings.agentProfiles[agentId] === 'sage' ? 'selected' : ''}>Sage</option>
-          <option value="compass" ${settings.agentProfiles[agentId] === 'compass' ? 'selected' : ''}>Compass</option>
-        </select>
-      `;
-      container.appendChild(card);
-    });
-  } catch (e) {
-    container.innerHTML = '<p style="color: var(--muted-foreground)">Could not load agents - bridge not connected</p>';
-  }
-}
-
-function updateConnectionStatus(connected) {
-  const el = document.getElementById('connection-status');
-  if (connected) {
-    el.className = 'status-indicator connected';
-    el.textContent = 'Connected';
-  } else {
-    el.className = 'status-indicator disconnected';
-    el.textContent = 'Disconnected';
-  }
-}
-
-async function testConnection() {
-  const url = document.getElementById('gateway-url').value;
-  const key = document.getElementById('api-key').value;
-  
-  try {
-    const res = await fetch(`${url}/v1/models`, {
-      headers: key ? { 'Authorization': `Bearer ${key}` } : {}
-    });
-    updateConnectionStatus(res.ok);
-    if (res.ok) {
-      alert('✅ Connection successful!');
-    } else {
-      alert(`❌ Connection failed: HTTP ${res.status}`);
+    // Agent profiles
+    if (settings.agents) {
+      const grid = $('agentsGrid');
+      grid.innerHTML = '';
+      for (const [id, cfg] of Object.entries(settings.agents)) {
+        const card = document.createElement('div');
+        card.className = 'agent-card';
+        card.innerHTML = `
+          <h3>${cfg.displayName || id}</h3>
+          <small>${cfg.role?.slice(0, 50) || 'Agent'}</small>
+          <p style="margin-top:8px;font-size:11px;color:var(--accent);">Profile: ${cfg.hermesProfile || 'default'}</p>
+        `;
+        grid.appendChild(card);
+      }
     }
   } catch (e) {
-    updateConnectionStatus(false);
-    alert(`❌ Connection failed: ${e.message}`);
+    toast('Failed to load settings');
   }
 }
 
-function saveSettings() {
-  settings.gatewayUrl = document.getElementById('gateway-url').value;
-  settings.apiKey = document.getElementById('api-key').value;
-  settings.bridgePort = parseInt(document.getElementById('bridge-port').value) || 8766;
-  settings.theme = document.getElementById('theme-select').value;
-  settings.autoStart = document.getElementById('toggle-autostart').classList.contains('active');
-  settings.wakeWord = document.getElementById('toggle-wakeword').classList.contains('active');
-  settings.debug = document.getElementById('toggle-debug').classList.contains('active');
+async function save() {
+  $('saveBtn').disabled = true;
   
-  // Collect agent profiles
-  document.querySelectorAll('#agent-profiles select').forEach(select => {
-    const agent = select.dataset.agent;
-    settings.agentProfiles[agent] = select.value;
-  });
-  
-  localStorage.setItem('lazy-agents-settings', JSON.stringify(settings));
-  
-  // Also save to bridge
-  fetch(`http://localhost:${settings.bridgePort}/agents_config`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(settings.agentProfiles)
-  }).catch(() => {});
-  
-  alert('✅ Settings saved!');
-}
-
-// Toggle switches
-document.querySelectorAll('.toggle-switch').forEach(toggle => {
-  toggle.addEventListener('click', () => toggle.classList.toggle('active'));
-});
-
-document.getElementById('save-settings').addEventListener('click', saveSettings);
-document.getElementById('test-connection').addEventListener('click', testConnection);
-document.getElementById('restart-bridge').addEventListener('click', async () => {
   try {
-    await fetch(`http://localhost:${settings.bridgePort}/restart`, { method: 'POST' });
-    alert('✅ Bridge restart initiated');
+    const result = await window.hermes.saveSettings({
+      gatewayUrl: $('gatewayUrl').value,
+      apiKey: $('apiKey').value,
+      bridgePort: parseInt($('bridgePort').value),
+      autoStart: $('autoStart').checked,
+      wakeWord: $('wakeWord').checked,
+      debug: $('debug').checked,
+      vaultPath: $('vaultPath').value
+    });
+    
+    if (result.ok) {
+      toast('Settings saved!' + (result.restartNeeded ? ' Restarting bridge...' : ''));
+    }
   } catch (e) {
-    alert(`❌ Could not restart bridge: ${e.message}`);
+    toast('Failed to save');
   }
-});
+  
+  $('saveBtn').disabled = false;
+}
 
-// Initialize
-loadSettings();
+async function testGateway() {
+  $('testGatewayBtn').disabled = true;
+  $('gatewayStatus').textContent = 'Testing...';
+  $('gatewayStatus').className = 'status';
+  
+  try {
+    const result = await window.hermes.testConnection();
+    if (result.ok) {
+      $('gatewayStatus').textContent = '✓ Connected';
+      $('gatewayStatus').className = 'status ok';
+    } else {
+      $('gatewayStatus').textContent = `✗ ${result.statusCode || result.error}`;
+      $('gatewayStatus').className = 'status error';
+    }
+  } catch (e) {
+    $('gatewayStatus').textContent = '✗ Failed';
+    $('gatewayStatus').className = 'status error';
+  }
+  
+  $('testGatewayBtn').disabled = false;
+}
+
+$('saveBtn').addEventListener('click', save);
+$('testGatewayBtn').addEventListener('click', testGateway);
+
+document.addEventListener('DOMContentLoaded', load);
 </script>
+
 </body>
 </html>

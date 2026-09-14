@@ -4,148 +4,137 @@
 <meta charset="UTF-8">
 <title>LAZY AGENTS</title>
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="app.css">
 </head>
 <body>
 
-  <header class="topbar">
-    <div class="brand-mark"><span class="brand-dot"></span> LAZY AGENTS</div>
-    <div class="topbar-center">
-      <span class="eyebrow">HERMES COUNCIL</span>
-      <span id="connection-label">CONNECTING</span>
-      <span id="voice-indicator" class="voice-indicator hidden">🎤</span>
-    </div>
-    <div class="topbar-actions">
-      <button id="wake-btn" class="icon-btn" title="Start voice activation">🎤</button>
-      <button id="sidebar-toggle" class="icon-btn" title="Toggle sidebar">☰</button>
-      <button id="clear-btn" class="icon-btn" title="Clear conversation">CLR</button>
-      <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
-    </div>
-  </header>
+<header class="topbar">
+  <div class="brand-mark"><span class="brand-dot"></span> LAZY AGENTS</div>
+  <div class="topbar-center">
+    <span class="eyebrow">HERMES COUNCIL</span>
+    <span id="connection-label">CONNECTING</span>
+    <span id="voice-indicator" class="voice-indicator" style="display:none;">🎤</span>
+  </div>
+  <div class="topbar-actions">
+    <button id="wake-btn" class="icon-btn" title="Voice Activation">🎤</button>
+    <button id="collapse-left-btn" class="icon-btn" title="Toggle Sidebar">◀</button>
+    <button id="clear-btn" class="icon-btn" title="Clear">CLR</button>
+    <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+    <button id="collapse-right-btn" class="icon-btn" title="Toggle Workspace">▶</button>
+  </div>
+</header>
 
-  <main class="workspace">
-    <!-- Collapsible Sidebar with App Switcher -->
-    <aside class="panel panel-left collapsible" id="left-panel">
-      <div class="panel-heading">
-        <span>SIDE PANEL</span>
-        <button id="collapse-left" class="collapse-btn">◀</button>
-      </div>
-      
-      <!-- App Switcher Tabs -->
-      <div class="app-switcher">
-        <button class="app-tab active" data-app="instagram">Instagram</button>
-        <button class="app-tab" data-app="chatgpt">ChatGPT</button>
-        <button class="app-tab" data-app="claude">Claude</button>
-        <button class="app-tab" data-app="obsidian">Obsidian</button>
-      </div>
-      
-      <!-- App Containers -->
-      <div class="app-container">
-        <webview id="instagram-webview" class="app-webview active" src="https://www.instagram.com/" partition="persist:ig"></webview>
-        <webview id="chatgpt-webview" class="app-webview" src="https://chat.openai.com/" partition="persist:chatgpt"></webview>
-        <webview id="claude-webview" class="app-webview" src="https://claude.ai/" partition="persist:claude"></webview>
-        <div id="obsidian-view" class="app-webview">
-          <div class="obsidian-header">
-            <h3>📚 Obsidian Vault</h3>
-            <input type="text" id="vault-search" placeholder="Search notes...">
-          </div>
-          <div id="vault-files" class="vault-files"></div>
-          <div id="vault-content" class="vault-content"></div>
+<main id="workspace" class="workspace">
+  <!-- Left Panel - Apps Sidebar -->
+  <aside class="panel panel-left" id="panel-left">
+    <div class="panel-heading">
+      <span id="left-title">APPS</span>
+      <button id="collapse-left" class="collapse-btn">◀</button>
+    </div>
+    
+    <div class="app-switcher">
+      <button class="app-tab active" data-app="instagram">Insta</button>
+      <button class="app-tab" data-app="chatgpt">GPT</button>
+      <button class="app-tab" data-app="claude">Claude</button>
+      <button class="app-tab" data-app="obsidian">Vault</button>
+    </div>
+    
+    <div class="app-container">
+      <webview id="webview-instagram" class="app-webview active" src="https://www.instagram.com/" partition="persist:ig"></webview>
+      <webview id="webview-chatgpt" class="app-webview" src="https://chat.openai.com/" partition="persist:gpt"></webview>
+      <webview id="webview-claude" class="app-webview" src="https://claude.ai/" partition="persist:claude"></webview>
+      <div id="obsidian-view" class="app-webview">
+        <div class="obsidian-header">
+          <h3>📚 Obsidian Vault</h3>
+          <input type="text" id="vault-search" placeholder="Search notes...">
         </div>
+        <div id="vault-files" class="vault-files"></div>
+        <div id="vault-content" class="vault-content">Select a note to view</div>
       </div>
-      
-      <!-- Activity Feed -->
-      <div class="activity-section">
-        <div class="panel-heading"><span>LIVE FEED</span><span class="live-indicator">●</span></div>
-        <div id="activity-feed" class="activity-feed"></div>
-      </div>
-    </aside>
-
-    <!-- Main Stage -->
-    <section class="stage">
-      <div class="stage-heading">
-        <span class="eyebrow">ORCHESTRATION ROOM</span>
-        <h1>Think together.</h1>
-        <p>Click an agent to message them directly, or use the input below.</p>
-      </div>
-      <div class="halo"></div>
-
-      <!-- Chain layer for council mode -->
-      <svg id="chain-layer" class="chain-layer"></svg>
-
-      <!-- Agent Grid -->
-      <div id="agent-grid" class="agent-grid">
-        <!-- Populated by renderer.js -->
-      </div>
-    </section>
-
-    <!-- Right Panel -->
-    <aside class="panel panel-right">
-      <div class="panel-heading">
-        <span>WORKSPACE</span>
-      </div>
-      <div class="tabs">
-        <button class="tab active" data-tab="output">OUTPUT</button>
-        <button class="tab" data-tab="vault">VAULT</button>
-        <button class="tab" data-tab="context">CONTEXT</button>
-      </div>
-      
-      <!-- Output View -->
-      <div id="output-view" class="panel-body tab-body active">
-        <div id="response-view" class="response-view">
-          <span class="muted">Your conversation will appear here.</span>
-        </div>
-      </div>
-      
-      <!-- Vault View -->
-      <div id="vault-view" class="panel-body tab-body">
-        <div class="vault-tree" id="vault-tree"></div>
-      </div>
-      
-      <!-- Context View -->
-      <div id="context-view" class="panel-body tab-body">
-        <pre id="shared-context"></pre>
-      </div>
-    </aside>
-  </main>
-
-  <!-- Input Dock -->
-  <div class="input-dock" id="input-dock">
-    <div class="input-meta">
-      <span class="eyebrow">SEND TO</span>
-      <select id="agent-select"></select>
     </div>
-    <div class="input-wrap">
-      <input id="message-input" placeholder="Ask the council anything..." autocomplete="off">
-      <button id="send-btn" title="Send message">SEND</button>
+    
+    <div class="activity-section">
+      <div class="panel-heading"><span>FEED</span><span class="live-indicator">●</span></div>
+      <div id="activity-feed" class="activity-feed"></div>
     </div>
-    <div class="input-hint">ENTER TO SEND | TAB FOR COUNCIL MODE</div>
+  </aside>
+
+  <!-- Main Stage -->
+  <section class="stage">
+    <div class="stage-heading">
+      <span class="eyebrow">Orchestration Room</span>
+      <h1>Think Together</h1>
+      <p>Click an agent to chat, or use the input below</p>
+    </div>
+    <div class="halo"></div>
+    <svg id="chain-layer" class="chain-layer"></svg>
+    <div id="agent-grid" class="agent-grid"></div>
+  </section>
+
+  <!-- Right Panel - Output -->
+  <aside class="panel panel-right" id="panel-right">
+    <div class="panel-heading">
+      <span id="right-title">OUTPUT</span>
+      <button id="collapse-right" class="collapse-btn">▶</button>
+    </div>
+    
+    <div class="tabs">
+      <button class="tab active" data-tab="output">Output</button>
+      <button class="tab" data-tab="vault">Vault</button>
+      <button class="tab" data-tab="context">Context</button>
+    </div>
+    
+    <div id="output-view" class="panel-body tab-body active">
+      <div id="response-view" class="response-view">
+        <span class="muted">Your conversation will appear here...</span>
+      </div>
+    </div>
+    
+    <div id="vault-view" class="panel-body tab-body">
+      <div id="vault-tree" class="vault-files"></div>
+    </div>
+    
+    <div id="context-view" class="panel-body tab-body">
+      <pre id="shared-context"></pre>
+    </div>
+  </aside>
+</main>
+
+<!-- Input Dock -->
+<div class="input-dock" id="input-dock">
+  <div class="input-meta">
+    <span class="eyebrow">SEND TO</span>
+    <select id="agent-select"></select>
   </div>
-
-  <!-- Agent Detail Popup (shown on click) -->
-  <div id="agent-popup" class="agent-popup hidden">
-    <div class="popup-header">
-      <span class="popup-agent-name">Agent</span>
-      <span class="popup-agent-status">idle</span>
-      <button class="popup-close">✕</button>
-    </div>
-    <div class="popup-thinking">Waiting for task...</div>
-    <div class="popup-history"></div>
-    <div class="popup-input">
-      <input type="text" placeholder="Quick message...">
-      <button>→</button>
-    </div>
+  <div class="input-wrap">
+    <input id="message-input" placeholder="Ask the council anything..." autocomplete="off">
+    <button id="send-btn">SEND</button>
   </div>
+  <div class="input-hint">ENTER to send</div>
+</div>
 
-  <!-- Agent Hover Tooltip -->
-  <div id="agent-tooltip" class="agent-tooltip hidden">
-    <div class="tooltip-name"></div>
-    <div class="tooltip-role"></div>
-    <div class="tooltip-state"></div>
-    <div class="tooltip-hint">Click to chat</div>
+<!-- Agent Popup -->
+<div id="agent-popup" class="agent-popup hidden">
+  <div class="popup-header">
+    <span class="popup-agent-name">Agent</span>
+    <span class="popup-agent-status">idle</span>
+    <button class="popup-close">✕</button>
   </div>
+  <div class="popup-thinking">Waiting for input...</div>
+  <div class="popup-input">
+    <input type="text" placeholder="Quick message...">
+    <button>→</button>
+  </div>
+</div>
 
-  <script src="mascot.js"></script>
-  <script src="renderer.js"></script>
+<!-- Agent Tooltip -->
+<div id="agent-tooltip" class="agent-tooltip hidden">
+  <div class="tooltip-name"></div>
+  <div class="tooltip-role"></div>
+  <div class="tooltip-state"></div>
+  <div class="tooltip-hint">Click to chat</div>
+</div>
+
+<script src="mascot.js"></script>
+<script src="renderer.js"></script>
 </body>
 </html>

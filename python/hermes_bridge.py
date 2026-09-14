@@ -471,16 +471,12 @@ async def get_agents_config():
     return AGENTS
 
 
-@app.get("/vault")
-async def vault_list():
-    if not VAULT_DIR.exists():
-        return {"files": [f"(vault path not found: {VAULT_DIR})"]}
-    return {"files": [str(path.relative_to(VAULT_DIR)) for path in VAULT_DIR.rglob("*.md")][:200]}
-
-
 @app.get("/context")
 async def get_context():
-    return {"content": CONTEXT_FILE.read_text() if CONTEXT_FILE.exists() else ""}
+    context_data = ""
+    if CONTEXT_FILE.exists():
+        context_data = CONTEXT_FILE.read_text()
+    return {"content": context_data, "file": str(CONTEXT_FILE)}
 
 
 @app.post("/agents_config")
@@ -538,6 +534,34 @@ async def get_vault_settings():
     return {"vault_path": str(VAULT_DIR), "exists": VAULT_DIR.exists()}
 
 
+@app.get("/vault")
+async def list_vault_files():
+    """List markdown files in the vault."""
+    if not VAULT_DIR.exists():
+        return {"files": ["Vault not found - configure path in Settings"]}
+    
+    files = []
+    for f in VAULT_DIR.rglob("*.md"):
+        rel_path = f.relative_to(VAULT_DIR)
+        files.append(str(rel_path))
+    
+    return {"files": sorted(files)[:100], "vault_path": str(VAULT_DIR)}
+
+
+@app.get("/vault/{file_path:path}")
+async def read_vault_file(file_path: str):
+    """Read a specific vault file."""
+    full_path = VAULT_DIR / file_path
+    if not full_path.exists() or not full_path.is_file():
+        return {"error": "File not found"}
+    
+    try:
+        content = full_path.read_text(encoding="utf-8")
+        return content
+    except Exception as e:
+        return {"error": str(e)}
+
+
 @app.post("/vault/settings")
 async def set_vault_settings(settings: dict):
     """Update vault path."""
@@ -547,3 +571,24 @@ async def set_vault_settings(settings: dict):
         VAULT_DIR = Path(new_path)
         return {"ok": True, "vault_path": str(VAULT_DIR)}
     return {"error": "No path provided"}
+
+
+@app.on_event("startup")
+async def load_hermes_profiles():
+    """Preload profile information from Hermes."""
+    global PROFILES
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            resp = await client.get(f"{HERMES_GATEWAY_URL}/v1/profiles", 
+                headers={"Authorization": f"Bearer {HERMES_API_KEY}"})
+            if resp.status_code == 200:
+                PROFILES = resp.json()
+    except Exception as e:
+        print(f"[hermes_bridge] Could not load profiles: {e}")
+        PROFILES = {}
+
+
+@app.get("/profiles")
+async def list_profiles():
+    """List available Hermes profiles."""
+    return {"profiles": list(PROFILES.keys()) if PROFILES else ["default", "byte", "ledger", "sage", "compass"]}
