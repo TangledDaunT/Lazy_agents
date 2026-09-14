@@ -2,39 +2,62 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Hermes Council</title>
+<title>LAZY AGENTS</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="stage">
-    <div class="halo"></div>
+  <header class="topbar">
+    <div class="brand-mark"><span class="brand-dot"></span> LAZY AGENTS</div>
+    <div class="topbar-center"><span class="eyebrow">HERMES COUNCIL</span><span id="connection-label">CONNECTING</span></div>
+    <div class="topbar-actions">
+      <button id="clear-btn" class="icon-btn" title="Clear conversation">CLR</button>
+      <button id="dashboard-btn" class="icon-btn" title="Open Dashboard">CFG</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel panel-left">
+      <div class="panel-heading"><span>LIVE FEED</span><span class="live-indicator">LIVE</span></div>
+      <div id="activity-feed" class="activity-feed"></div>
+      <div class="instagram-preview">
+        <div class="preview-label">SOCIAL WINDOW</div>
+        <webview id="ig-webview" src="https://www.instagram.com/" partition="persist:ig"></webview>
+      </div>
+    </aside>
+
+    <section class="stage">
+      <div class="stage-heading"><span class="eyebrow">ORCHESTRATION ROOM</span><h1>Think together.</h1><p>Direct a specialist or activate the full council.</p></div>
+      <div class="halo"></div>
 
     <!-- SVG layer for council-mode chain-in-circle connections -->
     <svg id="chain-layer" class="chain-layer"></svg>
 
-    <div id="agent-grid" class="agent-grid">
+      <div id="agent-grid" class="agent-grid">
       <!-- populated by renderer.js from agents_config.json -->
+      </div>
+    </section>
+
+    <aside class="panel panel-right">
+      <div class="panel-heading"><span>WORKSPACE</span><span class="panel-count">02</span></div>
+      <div class="tabs">
+        <button class="tab active" data-tab="vault">VAULT</button>
+        <button class="tab" data-tab="sync">CONTEXT</button>
     </div>
+      <div id="vault-view" class="panel-body tab-body active"></div>
+      <div id="sync-view" class="panel-body tab-body"></div>
+      <div class="response-panel">
+        <div class="panel-heading"><span>COUNCIL OUTPUT</span></div>
+        <div id="response-view" class="response-view"><span class="muted">Your next answer will appear here.</span></div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="input-dock" id="input-dock">
+    <div class="input-meta"><span class="eyebrow">SEND TO</span><select id="agent-select"></select></div>
+    <div class="input-wrap"><input id="message-input" placeholder="Ask the council anything..." autocomplete="off"><button id="send-btn" title="Send message">SEND</button></div>
+    <div class="input-hint">ENTER TO SEND</div>
   </div>
-
-  <div class="panel panel-left">
-    <div class="panel-header">Instagram</div>
-    <webview id="ig-webview" src="https://www.instagram.com/" partition="persist:ig"></webview>
-  </div>
-
-  <div class="panel panel-right">
-    <div class="panel-header">
-      <button class="tab active" data-tab="vault">Obsidian Vault</button>
-      <button class="tab" data-tab="sync">Shared Context</button>
-    </div>
-    <div id="vault-view" class="panel-body tab-body active"></div>
-    <div id="sync-view" class="panel-body tab-body"></div>
-  </div>
-
-  <button id="dashboard-btn" class="dashboard-btn" title="Open Dashboard">&#9881;</button>
-
-  <div class="input-dock" id="input-dock"></div>
 
   <script src="renderer.js"></script>
 </body>
