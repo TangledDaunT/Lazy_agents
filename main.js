@@ -121,15 +121,20 @@ function connectWS() {
 }
 
 function createMainWindow() {
+  const iconPath = path.join(__dirname, 'assets', 'icon.png');
+  
   mainWindow = new BrowserWindow({
     width: 1600,
     height: 1000,
     backgroundColor: '#000000',
+    title: 'LazyAgents',
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       webviewTag: true,
       contextIsolation: true,
       nodeIntegration: false,
+      partition: 'persist:lazyagents',
     },
   });
   mainWindow.loadFile(path.join(__dirname, 'index.html'));

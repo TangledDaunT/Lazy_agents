@@ -1,34 +1,83 @@
 /**
- * Mascot System - Pixel-art avatar rendering for Hermes Council agents
+ * Mascot System - Pixel-art avatar rendering for LazyAgents Council
+ * Priority fixes: correct mascot paths, status badges, click-to-chat
  */
 
 const MascotSystem = {
   mascots: {},
   
+  // Agent to mascot animal mapping
+  agentMascots: {
+    hermes: { animal: 'owl', defaultOutfit: 'corporate' },
+    byte: { animal: 'monkey', defaultOutfit: 'casual' },
+    ledger: { animal: 'lion', defaultOutfit: 'suit' },
+    sage: { animal: 'cat', defaultOutfit: 'corporate' },
+    compass: { animal: 'dog', defaultOutfit: 'suit' }
+  },
+  
+  // Accent colors per agent
+  accentColors: {
+    hermes: '#f5d061',
+    byte: '#38bdf8',
+    ledger: '#10b981',
+    sage: '#8b5cf6',
+    compass: '#f43f5e'
+  },
+  
   /**
    * Create a pixel-art mascot element for an agent
    */
   createMascot(config) {
-    const { agentId, accentColor = '#f5d061', state = 'idle', outfit = 'corporate' } = config;
+    const { agentId, accentColor, state = 'idle', outfit } = config;
+    
+    const mascotInfo = this.agentMascots[agentId] || { animal: 'owl', defaultOutfit: 'corporate' };
+    const effectiveOutfit = outfit || mascotInfo.defaultOutfit;
+    const effectiveAccent = accentColor || this.accentColors[agentId] || '#f5d061';
     
     const mascotDiv = document.createElement('div');
     mascotDiv.className = `mascot ${state}`;
     mascotDiv.id = `mascot-${agentId}`;
-    mascotDiv.style.setProperty('--agent-color', accentColor);
+    mascotDiv.dataset.agent = agentId;
+    mascotDiv.style.setProperty('--agent-color', effectiveAccent);
     
-    // Create pixel-art image
+    // Create pixel-art image with correct path
     const img = document.createElement('img');
-    img.src = `assets/mascots/${agentId}-${outfit}.png`;
+    img.src = `assets/mascots/${agentId}-${effectiveOutfit}.png`;
     img.className = 'mascot-sprite';
-    img.alt = agentId;
+    img.alt = `${agentId} mascot`;
+    img.draggable = false;
+    
+    // Handle image load errors - show initial if specific outfit missing
+    img.onerror = () => {
+      console.warn(`[Mascot] Could not load ${img.src}, trying fallback`);
+      const fallbackOutfit = mascotInfo.defaultOutfit;
+      img.src = `assets/mascots/${agentId}-${fallbackOutfit}.png`;
+      
+      // Second fallback - try default corporate
+      img.onerror = () => {
+        console.warn(`[Mascot] Fallback failed for ${agentId}, using placeholder`);
+        mascotDiv.innerHTML = `<span style="font-size:28px;font-weight:700;">${agentId[0].toUpperCase()}</span>`;
+        mascotDiv.style.background = `linear-gradient(135deg, ${effectiveAccent}33, ${effectiveAccent}66)`;
+        img.remove();
+      };
+    };
+    
     mascotDiv.appendChild(img);
     
-    // Create status badge
+    // Create status badge - docked to top-right corner of mascot circle
     const badge = document.createElement('div');
     badge.className = 'status-badge';
+    badge.id = `badge-${agentId}`;
     mascotDiv.appendChild(badge);
     
-    this.mascots[agentId] = { element: mascotDiv, config, state };
+    // Store mascot reference
+    this.mascots[agentId] = { 
+      element: mascotDiv, 
+      config: { ...config, outfit: effectiveOutfit }, 
+      state,
+      accentColor: effectiveAccent
+    };
+    
     this.updateBadge(mascotDiv, state);
     
     return mascotDiv;
@@ -36,20 +85,31 @@ const MascotSystem = {
   
   /**
    * Update status badge based on agent state
+   * States: idle, working, awaiting-approval, done
    */
   updateBadge(mascotDiv, state) {
     const badge = mascotDiv.querySelector('.status-badge');
     if (!badge) return;
     
+    // Reset badge
     badge.className = 'status-badge';
+    badge.innerHTML = '';
     
+    // Set badge based on state
     if (state === 'working') {
       badge.classList.add('badge-thinking');
-    } else if (state === 'awaiting-approval') {
+      badge.title = 'Thinking...';
+      // Cursor icon is rendered via CSS
+    } else if (state === 'awaiting-approval' || state === 'asking') {
       badge.classList.add('badge-asking');
+      badge.title = 'Needs approval';
+      badge.innerHTML = '💡';
     } else if (state === 'done') {
       badge.classList.add('badge-done');
+      badge.title = 'Task complete';
+      badge.innerHTML = '✓';
     }
+    // idle = no badge shown (badge is hidden via CSS when no matching class)
   },
   
   /**
@@ -58,9 +118,11 @@ const MascotSystem = {
   setState(mascotDiv, state) {
     if (!mascotDiv) return;
     
+    // Update class
     mascotDiv.className = `mascot ${state}`;
     this.updateBadge(mascotDiv, state);
     
+    // Update stored state
     const agentId = mascotDiv.id.replace('mascot-', '');
     if (this.mascots[agentId]) {
       this.mascots[agentId].state = state;
@@ -75,44 +137,31 @@ const MascotSystem = {
   },
   
   /**
-   * Enter council mode - circular formation with synchronized thinking badges
+   * Get mascot state
    */
-  enterCouncilMode() {
-    const agents = Object.keys(this.mascots);
-    const radius = 120;
-    const centerX = 180;
-    const centerY = 140;
-    
-    agents.forEach((agentId, index) => {
-      const mascot = this.mascots[agentId];
-      if (!mascot?.element) return;
-      
-      const angle = (index / agents.length) * 2 * Math.PI - Math.PI / 2;
-      const x = centerX + Math.cos(angle) * radius;
-      const y = centerY + Math.sin(angle) * radius;
-      
-      mascot.element.style.transition = 'transform 0.5s ease';
-      mascot.element.style.position = 'absolute';
-      mascot.element.style.left = `${x}px`;
-      mascot.element.style.top = `${y}px`;
-      mascot.element.style.transform = 'translate(-50%, -50%)';
-      
-      this.setState(mascot.element, 'working');
-    });
+  getState(agentId) {
+    return this.mascots[agentId]?.state || 'idle';
   },
   
   /**
-   * Exit council mode
+   * Change mascot outfit (for future skin switching)
    */
-  exitCouncilMode() {
-    Object.values(this.mascots).forEach(({ element }) => {
-      element.style.position = '';
-      element.style.left = '';
-      element.style.top = '';
-      element.style.transform = '';
-      this.setState(element, 'idle');
-    });
+  setOutfit(agentId, outfit) {
+    const mascot = this.mascots[agentId];
+    if (!mascot) return;
+    
+    const img = mascot.element.querySelector('.mascot-sprite');
+    if (img) {
+      mascot.element.classList.add('outfit-changing');
+      img.src = `assets/mascots/${agentId}-${outfit}.png`;
+      mascot.config.outfit = outfit;
+      
+      setTimeout(() => {
+        mascot.element.classList.remove('outfit-changing');
+      }, 500);
+    }
   }
 };
 
+// Make globally available
 window.MascotSystem = MascotSystem;

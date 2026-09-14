@@ -1,5 +1,6 @@
 {
-  "name": "lazy_agents",
+  "name": "LazyAgents",
+  "productName": "LazyAgents",
   "version": "1.0.0",
   "description": "Multi-agent desktop app with Hermes Agent backend",
   "main": "main.js",

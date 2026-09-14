@@ -212,6 +212,8 @@ body {
   position: relative;
   overflow: hidden;
   background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-webview {
@@ -230,8 +232,27 @@ body {
   overflow: hidden;
 }
 
+/* Instagram specific - ensure proper fitting */
 .app-webview.active {
   display: block;
+}
+
+/* Ensure webviews fit their mobile viewport */
+webview {
+  contain: content;
+}
+
+webview::-webkit-scrollbar {
+  width: 4px;
+}
+
+webview::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+webview::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 2px;
 }
 
 /* Obsidian View */
@@ -394,6 +415,15 @@ body {
 
 .agent-slot:hover {
   transform: scale(1.05);
+  cursor: pointer;
+}
+
+.agent-slot.selected {
+  transform: scale(1.08);
+}
+
+.agent-slot.selected .mascot {
+  box-shadow: 0 0 30px var(--agent-color), 0 0 60px var(--agent-color);
 }
 
 /* Center Hermes agent */
@@ -501,58 +531,80 @@ body {
   100% { opacity: 1; }
 }
 
-/* Status Badges */
+/* Status Badges - docked to corner of mascot */
+.mascot {
+  position: relative;
+}
+
 .status-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 20px;
-  height: 20px;
+  top: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: transparent;
   pointer-events: none;
   z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Default hidden - only show with specific badge classes */
+.status-badge:not(.badge-thinking):not(.badge-asking):not(.badge-done) {
+  display: none;
 }
 
 .badge-thinking {
-  background: rgba(245, 208, 97, 0.9);
+  background: rgba(245, 208, 97, 0.95);
+  border: 2px solid #f5d061;
   animation: pulse-badge 0.8s infinite;
 }
 
-.badge-asking::after {
-  content: '💡';
-  font-size: 14px;
-  position: absolute;
-  top: -2px;
-  right: -2px;
+.badge-thinking::before {
+  content: '⏳';
+  font-size: 12px;
 }
 
-.badge-done::after {
-  content: '✓';
-  font-size: 12px;
-  font-weight: bold;
+.badge-asking {
+  background: rgba(255, 215, 0, 0.95);
+  border: 2px solid #ffd700;
+}
+
+.badge-asking {
+  font-size: 11px;
+}
+
+.badge-done {
+  background: rgba(17, 24, 28, 0.95);
+  border: 2px solid #6ffbbe;
+}
+
+.badge-done {
   color: #6ffbbe;
-  position: absolute;
-  top: 2px;
-  right: 5px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 @keyframes pulse-badge {
   0%, 100% { transform: scale(1); opacity: 0.9; }
-  50% { transform: scale(1.2); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 1; }
 }
 
-/* Agent state indicators */
+/* Agent state indicators - anchored to mascot circle */
 .agent-state-dot {
   position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 12px;
-  height: 12px;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--green);
   border: 2px solid var(--paper);
-  z-index: 10;
+  z-index: 15;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 .agent-state-dot.working {
   background: var(--orange);

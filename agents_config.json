@@ -7,6 +7,7 @@
     "piperVoice": "en_US-ryan-high.onnx",
     "defaultSkin": "corporate",
     "accentColor": "#f5d061",
+    "mascot": "owl",
     "skins": ["suit", "casual", "beach", "dress", "corporate"],
     "hermesProfile": "default",
     "hermesKey": "change-me-local-dev"
@@ -19,6 +20,7 @@
     "piperVoice": "en_US-danny-low.onnx",
     "defaultSkin": "casual",
     "accentColor": "#38bdf8",
+    "mascot": "monkey",
     "skins": ["suit", "casual", "beach", "dress", "corporate"],
     "hermesProfile": "byte",
     "hermesKey": "CHANGE_ME_BYTE_KEY"
@@ -31,6 +33,7 @@
     "piperVoice": "en_US-kathleen-low.onnx",
     "defaultSkin": "suit",
     "accentColor": "#10b981",
+    "mascot": "lion",
     "skins": ["suit", "casual", "beach", "dress", "corporate"],
     "hermesProfile": "ledger",
     "hermesKey": "CHANGE_ME_LEDGER_KEY"
@@ -43,6 +46,7 @@
     "piperVoice": "en_US-lessac-medium.onnx",
     "defaultSkin": "corporate",
     "accentColor": "#8b5cf6",
+    "mascot": "cat",
     "skins": ["suit", "casual", "beach", "dress", "corporate"],
     "hermesProfile": "sage",
     "hermesKey": "CHANGE_ME_SAGE_KEY"
@@ -53,8 +57,9 @@
     "position": "bottom-right",
     "piperVoice": "en_US-amy-medium.onnx",
     "wakeWord": "compass",
-    "defaultSkin": "dress",
+    "defaultSkin": "suit",
     "accentColor": "#f43f5e",
+    "mascot": "dog",
     "skins": ["suit", "casual", "beach", "dress", "corporate"],
     "hermesProfile": "compass",
     "hermesKey": "CHANGE_ME_COMPASS_KEY"

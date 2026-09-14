@@ -213,6 +213,7 @@ function buildGrid() {
     slot.dataset.agent = id;
     slot.style.setProperty('--agent-color', cfg.accentColor || '#f5d061');
     
+    // Use MascotSystem for pixel-art mascots
     const mascot = window.MascotSystem?.createMascot({
       agentId: id,
       accentColor: cfg.accentColor,
@@ -220,6 +221,7 @@ function buildGrid() {
       state: agentStates[id] || 'idle'
     }) || createSimpleMascot(id, cfg);
     
+    // Status dot - positioned inside mascot container
     const stateDot = document.createElement('div');
     stateDot.className = 'agent-state-dot';
     stateDot.id = `dot-${id}`;
@@ -233,9 +235,10 @@ function buildGrid() {
     slot.appendChild(name);
     grid.appendChild(slot);
     
-    // Click - show popup for this agent
+    // Click handler - select agent and open chat
     slot.addEventListener('click', (e) => {
       e.stopPropagation();
+      selectAgent(id);
       showAgentPopup(id, e);
     });
     
@@ -244,6 +247,29 @@ function buildGrid() {
     slot.addEventListener('mousemove', (e) => moveTooltip(e));
     slot.addEventListener('mouseleave', hideTooltip);
   }
+}
+
+/**
+ * Select an agent and set as SEND TO target
+ */
+function selectAgent(agentId) {
+  selectedAgent = agentId;
+  
+  // Update SEND TO dropdown
+  const select = $('agent-select');
+  if (select) {
+    select.value = agentId;
+  }
+  
+  // Highlight selected slot
+  document.querySelectorAll('.agent-slot').forEach(s => s.classList.remove('selected'));
+  const slot = $(`slot-${agentId}`);
+  if (slot) {
+    slot.classList.add('selected');
+  }
+  
+  // Update output view header
+  addActivity(`Selected: ${AGENTS[agentId]?.displayName || agentId}`, 'info');
 }
 
 
@@ -498,13 +524,13 @@ function renderOutput(text, replace) {
 function setState(agentId, state) {
   agentStates[agentId] = state;
   
-  // Update mascot
-  const mascot = $(`mascot-${agentId}`);
+  // Update mascot via MascotSystem
+  const mascot = window.MascotSystem?.getMascot(agentId);
   if (mascot) {
     window.MascotSystem?.setState(mascot, state);
   }
   
-  // Update state dot
+  // Update state dot color
   const dot = $(`dot-${agentId}`);
   if (dot) {
     dot.className = `agent-state-dot ${state}`;
@@ -515,7 +541,22 @@ function setState(agentId, state) {
   if (popup?.dataset.agent === agentId) {
     popup.querySelector('.popup-agent-status').textContent = state;
     popup.querySelector('.popup-agent-status').className = 'popup-agent-status ' + state;
+    popup.querySelector('.popup-thinking').textContent = agentThinking[agentId] || getThinkingText(state);
   }
+}
+
+/**
+ * Get display text for agent state
+ */
+function getThinkingText(state) {
+  const stateMessages = {
+    'idle': 'Ready',
+    'working': 'Processing...',
+    'awaiting-approval': 'Waiting for approval',
+    'done': 'Task completed',
+    'listening': 'Listening...'
+  };
+  return stateMessages[state] || 'Ready';
 }
 
 // ============================================================

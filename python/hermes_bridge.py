@@ -235,7 +235,7 @@ async def create_run(
     stream: bool = True
 ) -> Dict:
     """Create a run on the Hermes gateway API.
-    
+
     Args:
         prompt: The user prompt/message
         agent_id: Optional agent ID for agent-specific runs
@@ -243,12 +243,12 @@ async def create_run(
         model: Optional model override
         skills: Optional list of skills to load
         stream: Whether to stream events (default: True)
-    
+
     Returns:
         Dict with run_id and status
     """
     create_url = f"{HERMES_GATEWAY_URL}/v1/runs"
-    
+
     headers = {
         "Content-Type": "application/json",
     }
@@ -256,12 +256,12 @@ async def create_run(
         headers["Authorization"] = f"Bearer {HERMES_API_KEY}"
     if session_id:
         headers["X-Hermes-Session-Id"] = session_id
-    
+
     payload = {
         "input": prompt,
         "stream": stream,
     }
-    
+
     if agent_id:
         # Get agent config if available
         if agent_id in AGENTS:
@@ -269,39 +269,44 @@ async def create_run(
             # Use the hermesProfile for routing
             if "hermesProfile" in agent_config:
                 payload["profile"] = agent_config["hermesProfile"]
+                print(f"[DEBUG] Routing agent {agent_id} to profile {agent_config['hermesProfile']}", flush=True)
             # Some agents may have specific model/skill settings
             if "model" in agent_config:
                 payload["model"] = agent_config["model"]
         payload["agent_id"] = agent_id
-    
+
     if model:
         payload["model"] = model
     if skills:
         payload["skills"] = skills
-    
+
+    print(f"[DEBUG] Creating run with payload: {payload}", flush=True)
+
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(create_url, headers=headers, json=payload)
-            
+            print(f"[DEBUG] Hermes response status: {response.status_code}", flush=True)
             if response.status_code not in (200, 201, 202):
+                error_text = await response.aread()
+                print(f"[DEBUG] Hermes error response: {error_text}", flush=True)
                 return {
                     "error": f"Failed to create run: HTTP {response.status_code}",
-                    "details": response.text
+                    "details": error_text.decode() if isinstance(error_text, bytes) else str(error_text)
                 }
-            
+
             result = response.json()
             run_id = result.get("run_id") or result.get("id")
-            
+
             if stream and run_id:
                 # Start streaming events in background
                 asyncio.create_task(stream_run_events(run_id, session_id, headers))
-            
+
             return {
                 "run_id": run_id,
                 "status": result.get("status", "created"),
                 "session_id": session_id
             }
-            
+
     except httpx.RequestError as e:
         return {"error": f"Connection error: {str(e)}"}
 
