@@ -5,6 +5,7 @@
 - `renderer/` - the UI: mascot grid, state-machine animations, council chain, input dock
 - `python/orchestrator.py` - the brain: talks to Nemotron Super, runs agent handoff, Piper TTS, shared-context sync file, vault listing
 - `python/wakeword_listener.py` - offline wake-word loop (openWakeWord), one model per agent name
+- `python/hermes_bridge.py` - bridges Electron to Hermes Agent via Runs API (SSE streaming, websocket broadcast)
 - `agents_config.json` - names, wake words, Piper voice files, skins (editable live from the in-app Dashboard)
 
 ## Setup
@@ -23,6 +24,39 @@ export PIPER_VOICES_DIR="./python/voices"
 
 npm start
 ```
+
+## Using Hermes Bridge (Runs API)
+
+The `hermes_bridge.py` provides an alternative backend that connects to the Hermes Agent gateway API for more advanced agent features:
+
+```bash
+# Install dependencies
+pip install fastapi uvicorn httpx websockets
+
+# Start Hermes gateway (separate terminal)
+hermes gateway run
+
+# Start the bridge (defaults to port 8766)
+export HERMES_GATEWAY_URL=http://localhost:8642
+python python/hermes_bridge.py
+
+# Or use Tailscale URL for remote access
+export HERMES_GATEWAY_URL=http://your-tailscale-host:8642
+```
+
+The bridge exposes:
+- **WebSocket `/bus`** - Main endpoint for Electron to send/receive messages
+- **GET `/health`** - Health check and connection status
+- **GET `/agents`** - List available agents
+- **GET `/`** - API info and documentation
+
+Message types supported:
+- `create_run` - Create a new Hermes run with prompt
+- `cancel_run` - Cancel a running run
+- `get_status` - Get run status
+- `user_message` - Legacy compatibility (same as orchestrator.py)
+- `ping` - Health check
+
 
 ## What's real vs. stubbed right now
 - **Real and working**: Electron shell, black/halo canvas, 2-top/2-bottom + center grid layout, mascot state-machine (idle/listening/working/awaiting-approval CSS animations), council chain-in-circle SVG drawing, agent handoff via LLM tool-calling, shared context file all agents read/write, Instagram webview, dashboard for editing names/wake words/voices/skins.

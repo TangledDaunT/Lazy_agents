@@ -5,33 +5,41 @@ const WebSocket = require('ws');
 
 let mainWindow;
 let dashboardWindow;
-let pyOrchestrator;   // python orchestrator.py subprocess (the LLM brain)
-let pyWakeword;       // python wakeword_listener.py subprocess (offline wake-word engine)
-let wsClient;         // websocket connection into the python orchestrator
+let pyBridge;        // python/hermes_bridge.py subprocess (the Hermes API bridge)
+let pyWakeword;      // python/wakeword_listener.py subprocess (offline wake-word engine)
+let wsClient;        // websocket connection into the python bridge
 
 const PY = process.env.PYTHON_BIN || 'python3';
 const PYTHON_DIR = path.join(__dirname, 'python');
 
 function startBackend() {
-  pyOrchestrator = spawn(PY, [path.join(PYTHON_DIR, 'orchestrator.py')], { stdio: 'inherit' });
-  pyWakeword = spawn(PY, [path.join(PYTHON_DIR, 'wakeword_listener.py')], { stdio: 'inherit' });
+  // Start the Hermes bridge (connects to gateway API)
+  pyBridge = spawn(PY, [path.join(PYTHON_DIR, 'hermes_bridge.py')], { stdio: 'inherit' });
+  
+  // Start the wake word listener (optional, for voice activation)
+  pyWakeword = spawn(PY, [path.join(PYTHON_DIR, 'wakeword_listener.py')], { 
+    stdio: 'inherit',
+    env: { ...process.env, PYTHONPATH: PYTHON_DIR }
+  });
 
-  // Wake word events come back over stdout as JSON lines, but easiest is a
-  // second tiny websocket the wakeword script pushes to. Orchestrator relays
-  // both agent replies and wake events on the same socket, tagged by "type".
-  setTimeout(connectWS, 1500);
+  // Connect to the bridge websocket after a short delay
+  setTimeout(connectWS, 2000);
 }
 
 function connectWS() {
-  wsClient = new WebSocket('ws://localhost:8765/bus');
-  wsClient.on('open', () => console.log('[main] connected to orchestrator bus'));
+  // Connect to hermes_bridge.py on port 8766 (default)
+  wsClient = new WebSocket('ws://localhost:8766/bus');
+  
+  wsClient.on('open', () => console.log('[main] connected to hermes bridge bus'));
+  
   wsClient.on('message', (raw) => {
     const data = JSON.parse(raw.toString());
     // Forward every backend event straight to the renderer's state machine
     if (mainWindow) mainWindow.webContents.send('bus-event', data);
   });
+  
   wsClient.on('close', () => setTimeout(connectWS, 2000));
-  wsClient.on('error', () => {});
+  wsClient.on('error', (e) => console.error('[main] WS error:', e.message));
 }
 
 function createMainWindow() {
@@ -41,12 +49,12 @@ function createMainWindow() {
     backgroundColor: '#000000',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      webviewTag: true,       // needed for the Instagram panel <webview>
+      webviewTag: true,
       contextIsolation: true,
       nodeIntegration: false,
     },
   });
-  mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, 'index.html'));
 }
 
 function createDashboardWindow() {
@@ -58,13 +66,18 @@ function createDashboardWindow() {
       contextIsolation: true,
     },
   });
-  dashboardWindow.loadFile(path.join(__dirname, 'renderer', 'dashboard.html'));
+  dashboardWindow.loadFile(path.join(__dirname, 'dashboard.html'));
 }
 
-// Renderer -> backend: user typed/spoke to a specific agent, or triggered /council
+// Renderer -> backend: user typed/spoke to a specific agent
 ipcMain.handle('send-to-agent', (event, { agent, text }) => {
   if (wsClient && wsClient.readyState === WebSocket.OPEN) {
-    wsClient.send(JSON.stringify({ type: 'user_message', agent, text }));
+    wsClient.send(JSON.stringify({ 
+      type: 'create_run', 
+      agent_id: agent,
+      prompt: text,
+      stream: true
+    }));
   }
 });
 
@@ -78,7 +91,7 @@ app.whenReady().then(() => {
 });
 
 app.on('before-quit', () => {
-  if (pyOrchestrator) pyOrchestrator.kill();
+  if (pyBridge) pyBridge.kill();
   if (pyWakeword) pyWakeword.kill();
 });
 

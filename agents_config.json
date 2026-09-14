@@ -6,42 +6,52 @@
     "wakeWord": "hermes",
     "piperVoice": "en_US-ryan-high.onnx",
     "defaultSkin": "corporate",
-    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+    "skins": ["suit", "casual", "beach", "dress", "corporate"],
+    "hermesProfile": "default",
+    "hermesKey": "change-me-local-dev"
   },
-  "coder": {
+  "byte": {
     "displayName": "Byte",
-    "role": "coding agent",
+    "role": "coding agent - writes, reviews, debugs code",
     "position": "top-left",
     "wakeWord": "byte",
     "piperVoice": "en_US-danny-low.onnx",
     "defaultSkin": "casual",
-    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+    "skins": ["suit", "casual", "beach", "dress", "corporate"],
+    "hermesProfile": "byte",
+    "hermesKey": "CHANGE_ME_BYTE_KEY"
   },
-  "stocks": {
+  "ledger": {
     "displayName": "Ledger",
-    "role": "stocks/finance agent",
+    "role": "stocks/finance agent - analyzes markets and financial data",
     "position": "top-right",
     "wakeWord": "ledger",
     "piperVoice": "en_US-kathleen-low.onnx",
     "defaultSkin": "suit",
-    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+    "skins": ["suit", "casual", "beach", "dress", "corporate"],
+    "hermesProfile": "ledger",
+    "hermesKey": "CHANGE_ME_LEDGER_KEY"
   },
-  "research": {
+  "sage": {
     "displayName": "Sage",
-    "role": "research agent",
+    "role": "research agent - web search, papers, fact-checking",
     "position": "bottom-left",
     "wakeWord": "sage",
     "piperVoice": "en_US-lessac-medium.onnx",
     "defaultSkin": "corporate",
-    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+    "skins": ["suit", "casual", "beach", "dress", "corporate"],
+    "hermesProfile": "sage",
+    "hermesKey": "CHANGE_ME_SAGE_KEY"
   },
-  "planner": {
+  "compass": {
     "displayName": "Compass",
-    "role": "planning/scheduling agent",
+    "role": "planning/scheduling agent - task breakdown and project management",
     "position": "bottom-right",
     "piperVoice": "en_US-amy-medium.onnx",
     "wakeWord": "compass",
     "defaultSkin": "dress",
-    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+    "skins": ["suit", "casual", "beach", "dress", "corporate"],
+    "hermesProfile": "compass",
+    "hermesKey": "CHANGE_ME_COMPASS_KEY"
   }
 }
