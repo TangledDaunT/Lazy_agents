@@ -444,6 +444,32 @@ body {
   margin-top: 2px;
 }
 
+
+/* Status Badges */
+.status-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  z-index: 20;
+}
+.badge-thinking {
+  width: 12px;
+  height: 12px;
+  background: var(--orange);
+  border-radius: 50%;
+  animation: blink 0.8s infinite;
+}
+.badge-asking::after {
+  content: '💡';
+  font-size: 14px;
+}
+.badge-done::after {
+  content: '✅';
+  font-size: 14px;
+}
+
 /* Agent state indicators */
 .agent-state-dot {
   position: absolute;
