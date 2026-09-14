@@ -477,6 +477,17 @@ body {
   height: 100%;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.mascot.outfit-changing .mascot-sprite {
+  animation: outfit-fade 0.5s ease-in-out;
+}
+
+@keyframes outfit-fade {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
 }
 
 /* Status Badges */
