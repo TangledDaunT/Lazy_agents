@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+__pycache__/
+*.pyc
+.env
+python/voices/
+python/wakeword_models/
+shared_context.md
+vault_placeholder/
