@@ -242,12 +242,25 @@
 
 <section>
   <h2>🔧 Advanced</h2>
-  
+
   <div class="field">
     <label class="checkbox-label">
       <input type="checkbox" id="debug">
       <span>Debug mode (verbose logging)</span>
     </label>
+  </div>
+
+  <div class="field">
+    <label class="checkbox-label">
+      <input type="checkbox" id="autoUpdate">
+      <span>Enable automatic updates</span>
+    </label>
+    <p class="hint">When enabled, app will check for updates on startup</p>
+  </div>
+
+  <div class="field">
+    <button class="primary" id="updateNowBtn">Check for Updates</button>
+    <span id="updateStatus" class="status"></span>
   </div>
 </section>
 
