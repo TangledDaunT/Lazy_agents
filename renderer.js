@@ -233,6 +233,76 @@ function buildGrid() {
   }
 }
 
+
+// ============================================================
+// COUNCIL MODE - Circular Formation
+// ============================================================
+
+function enterCouncilMode() {
+  const grid = $('agent-grid');
+  if (!grid) return;
+  
+  // Get all non-center agent slots
+  const slots = Array.from(grid.querySelectorAll('.agent-slot:not(.center)'));
+  const radius = 110;
+  const centerX = 180;
+  const centerY = 140;
+  
+  grid.classList.add('council-mode');
+  
+  // Position agents in circle
+  slots.forEach((slot, index) => {
+    const angle = (index / slots.length) * 2 * Math.PI - Math.PI / 2;
+    const x = centerX + Math.cos(angle) * radius;
+    const y = centerY + Math.sin(angle) * radius;
+    
+    slot.style.position = 'absolute';
+    slot.style.left = `${x}px`;
+    slot.style.top = `${y}px`;
+    slot.style.transform = 'translate(-50%, -50%)';
+    slot.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    
+    // Set all agents to working/thinking state
+    const id = slot.dataset.agent;
+    if (id) {
+      agentStates[id] = 'working';
+      const mascot = window.MascotSystem?.getMascot(id);
+      if (mascot) {
+        window.MascotSystem.setState(mascot, 'working');
+      }
+    }
+  });
+  
+  addActivity('Council mode activated - agents deliberating', 'sent');
+}
+
+function exitCouncilMode() {
+  const grid = $('agent-grid');
+  if (!grid) return;
+  
+  grid.classList.remove('council-mode');
+  
+  const slots = grid.querySelectorAll('.agent-slot');
+  slots.forEach(slot => {
+    slot.style.position = '';
+    slot.style.left = '';
+    slot.style.top = '';
+    slot.style.transform = '';
+    
+    const id = slot.dataset.agent;
+    if (id && id !== 'hermes') {
+      agentStates[id] = 'idle';
+      const mascot = window.MascotSystem?.getMascot(id);
+      if (mascot) {
+        window.MascotSystem.setState(mascot, 'idle');
+      }
+    }
+  });
+  
+  addActivity('Council disbanded', 'done');
+}
+
+// ============================================================
 function createSimpleMascot(id, cfg) {
   const div = document.createElement('div');
   div.className = 'mascot';

@@ -1,28 +1,33 @@
-
 import React, { useEffect, useRef } from 'react';
 
 const OUTFITS = ['suit', 'casual', 'beach', 'dress', 'corporate'];
 const STATES = ['idle', 'listening', 'working', 'awaiting-approval', 'done'];
 
 export function Mascot({ agentId, accentColor = '#f5d061', outfit = 'corporate', state = 'idle', className = '' }) {
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (containerRef.current) {
-        // Logic to update badge via MascotSystem global or direct state
-        window.MascotSystem?.updateBadge(containerRef.current, state);
-    }
-  }, [state]);
+  const safeOutfit = OUTFITS.includes(outfit) ? outfit : 'corporate';
+  const safeState = STATES.includes(state) ? state : 'idle';
+  
+  const getBadgeClass = () => {
+    if (safeState === 'working') return 'badge-thinking';
+    if (safeState === 'awaiting-approval') return 'badge-asking';
+    if (safeState === 'done') return 'badge-done';
+    return '';
+  };
 
   return (
     <div 
-      ref={containerRef}
-      className={`mascot ${state} ${className}`}
+      className={`mascot ${safeState} ${className}`}
       data-agent-id={agentId}
+      data-outfit={safeOutfit}
+      data-state={safeState}
       style={{ '--agent-color': accentColor }}
     >
-      <img src={`assets/mascots/${agentId}-${outfit}.png`} alt={agentId} style={{width: '100%', height: '100%'}} />
-      <div className={`status-badge ${state === 'working' ? 'badge-thinking' : state === 'awaiting-approval' ? 'badge-asking' : state === 'done' ? 'badge-done' : ''}`} />
+      <img 
+        src={`assets/mascots/${agentId}-${safeOutfit}.png`}
+        alt={agentId}
+        className="mascot-sprite"
+      />
+      <div className={`status-badge ${getBadgeClass()}`} />
     </div>
   );
 }
