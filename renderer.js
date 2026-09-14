@@ -31,14 +31,25 @@ const $ = (id) => document.getElementById(id);
 async function loadConfig() {
   try {
     const res = await fetch(`${BACKEND_HTTP}/agents_config?ts=${Date.now()}`);
-    AGENTS = await res.json();
+    const data = await res.json();
+    
+    // Handle if data is wrapped or direct
+    AGENTS = data.agents || data;
+    
+    if (!AGENTS || Object.keys(AGENTS).length === 0) {
+      console.error('No agents loaded');
+      addActivity('No agents found', 'error');
+      return;
+    }
+    
     orderedIds = Object.keys(AGENTS);
+    console.log('Loaded agents:', orderedIds);
     buildGrid();
     buildInputDock();
     loadObsidianVault();
   } catch (e) {
-    addActivity('Failed to load agents', 'error');
-    console.error(e);
+    addActivity('Failed to load agents: ' + e.message, 'error');
+    console.error('Load config error:', e);
   }
 }
 
@@ -72,6 +83,24 @@ function setupPanels() {
   // App tabs
   document.querySelectorAll('.app-tab').forEach(tab => {
     tab.addEventListener('click', () => switchApp(tab.dataset.app));
+  });
+  
+  // Inject mobile viewport into webviews when they load
+  document.querySelectorAll('webview').forEach(wv => {
+    wv.addEventListener('dom-ready', () => {
+      // Inject viewport meta tag for mobile rendering
+      wv.executeJavaScript(`
+        (function() {
+          let viewport = document.querySelector('meta[name="viewport"]');
+          if (!viewport) {
+            viewport = document.createElement('meta');
+            viewport.name = 'viewport';
+            document.head.appendChild(viewport);
+          }
+          viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        })();
+      `).catch(() => {});
+    });
   });
   
   // Right panel tabs
