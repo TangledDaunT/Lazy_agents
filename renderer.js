@@ -57,6 +57,19 @@ async function loadConfig() {
 // SIDEBAR & PANEL CONTROLS
 // ============================================================
 
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // Ctrl/Cmd + Shift + C = Toggle council mode
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+    e.preventDefault();
+    if (document.querySelector('.agent-grid.council-mode')) {
+      exitCouncilMode();
+    } else {
+      enterCouncilMode();
+    }
+  }
+});
+
 function setupPanels() {
   // Left sidebar collapse
   $('collapse-left')?.addEventListener('click', toggleLeftPanel);
