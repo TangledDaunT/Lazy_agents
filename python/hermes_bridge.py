@@ -28,6 +28,8 @@ BRIDGE_PORT = int(os.environ.get("BRIDGE_PORT", "8766"))
 
 HERE = Path(__file__).parent
 CONFIG_PATH = HERE.parent / "agents_config.json"
+CONTEXT_FILE = HERE.parent / "shared_context.md"
+VAULT_DIR = Path(os.environ.get("OBSIDIAN_VAULT_PATH", str(HERE.parent / "vault_placeholder")))
 
 # Load agent config
 try:
@@ -256,7 +258,7 @@ async def create_run(
         headers["X-Hermes-Session-Id"] = session_id
     
     payload = {
-        "prompt": prompt,
+        "input": prompt,
         "stream": stream,
     }
     
@@ -264,6 +266,9 @@ async def create_run(
         # Get agent config if available
         if agent_id in AGENTS:
             agent_config = AGENTS[agent_id]
+            # Use the hermesProfile for routing
+            if "hermesProfile" in agent_config:
+                payload["profile"] = agent_config["hermesProfile"]
             # Some agents may have specific model/skill settings
             if "model" in agent_config:
                 payload["model"] = agent_config["model"]
@@ -278,7 +283,7 @@ async def create_run(
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(create_url, headers=headers, json=payload)
             
-            if response.status_code not in (200, 201):
+            if response.status_code not in (200, 201, 202):
                 return {
                     "error": f"Failed to create run: HTTP {response.status_code}",
                     "details": response.text
@@ -455,6 +460,40 @@ async def health():
 async def list_agents():
     """List available agents from config."""
     return {"agents": list(AGENTS.keys())}
+
+
+@app.get("/vault")
+async def vault_list():
+    if not VAULT_DIR.exists():
+        return {"files": [f"(vault path not found: {VAULT_DIR})"]}
+    return {"files": [str(path.relative_to(VAULT_DIR)) for path in VAULT_DIR.rglob("*.md")][:200]}
+
+
+@app.get("/context")
+async def get_context():
+    return {"content": CONTEXT_FILE.read_text() if CONTEXT_FILE.exists() else ""}
+
+
+@app.post("/agents_config")
+async def update_config(new_config: dict):
+    global AGENTS
+    AGENTS = new_config
+    CONFIG_PATH.write_text(json.dumps(AGENTS, indent=2) + "\n")
+    return {"ok": True}
+
+
+@app.post("/create_run")
+async def http_create_run(request: dict):
+    """HTTP endpoint to create a run (for testing)."""
+    result = await create_run(
+        prompt=request.get("prompt", ""),
+        agent_id=request.get("agent"),
+        session_id=request.get("session_id"),
+        model=request.get("model"),
+        skills=request.get("skills"),
+        stream=request.get("stream", True)
+    )
+    return result
 
 
 @app.get("/")
