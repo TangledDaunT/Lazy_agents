@@ -1,0 +1,26 @@
+{
+  "name": "lazy_agents",
+  "version": "1.0.0",
+  "description": "Multi-agent desktop app with Hermes Agent backend",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TangledDaunT/Lazy_agents.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TangledDaunT/Lazy_agents/issues"
+  },
+  "homepage": "https://github.com/TangledDaunT/Lazy_agents#readme",
+  "dependencies": {
+    "electron": "^34.3.0",
+    "ws": "^8.18.2"
+  }
+}
