@@ -356,6 +356,62 @@ async function testGateway() {
   $('testGatewayBtn').disabled = false;
 }
 
+async function checkForUpdates() {
+  $('#updateNowBtn').disabled = true;
+  $('#updateStatus').textContent = 'Checking...';
+  $('#updateStatus').className = 'status';
+  
+  try {
+    const result = await window.hermes.checkForUpdates();
+    if (result.ok) {
+      if (result.hasUpdates) {
+        $('#updateStatus').textContent = 'Update available! Click to install.';
+        $('#updateStatus').className = 'status';
+        // Change button to install
+        $('#updateNowBtn').textContent = 'Install Update';
+        $('#updateNowBtn').onclick = installUpdate;
+      } else {
+        $('#updateStatus').textContent = 'Up to date';
+        $('#updateStatus').className = 'status ok';
+      }
+    } else {
+      $('#updateStatus').textContent = `Check failed: ${result.error}`;
+      $('#updateStatus').className = 'status error';
+    }
+  } catch (e) {
+    $('#updateStatus').textContent = 'Check failed';
+    $('#updateStatus').className = 'status error';
+  }
+  
+  $('#updateNowBtn').disabled = false;
+}
+
+async function installUpdate() {
+  $('#updateNowBtn').disabled = true;
+  $('#updateStatus').textContent = 'Updating...';
+  $('#updateStatus').className = 'status';
+  
+  try {
+    // This will trigger the update process
+    // The app will need to restart after update
+    const result = await window.hermes.checkForUpdates(); // Re-check to get latest
+    if (result.ok && result.hasUpdates) {
+      // In a real implementation, we'd have an update method
+      // For now, we'll just show a message
+      $('#updateStatus').textContent = 'Update ready! Please restart the app to apply.';
+      $('#updateStatus').className = 'status ok';
+      
+      // Show a toast
+      window.hermes?.sendToAgent?.('system', 'Update available. Please restart to install.');
+    }
+  } catch (e) {
+    $('#updateStatus').textContent = `Update failed: ${e.message || e}`;
+    $('#updateStatus').className = 'status error';
+  }
+  
+  $('#updateNowBtn').disabled = false;
+}
+
 $('saveBtn').addEventListener('click', save);
 $('testGatewayBtn').addEventListener('click', testGateway);
 

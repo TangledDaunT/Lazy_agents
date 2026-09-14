@@ -180,23 +180,23 @@ ipcMain.handle('save-settings', (event, newSettings) => {
   const restartNeeded = newSettings.gatewayUrl !== appSettings.gatewayUrl ||
                         newSettings.apiKey !== appSettings.apiKey ||
                         newSettings.bridgePort !== appSettings.bridgePort;
-  
+
   appSettings = { ...appSettings, ...newSettings };
   saveSettings();
-  
+
   if (restartNeeded) {
     // Restart bridge with new settings
     if (pyBridge) pyBridge.kill();
     setTimeout(startBackend, 500);
   }
-  
+
   return { ok: true, restartNeeded };
 });
 
 ipcMain.handle('test-connection', async () => {
   const http = require('http');
   const url = new URL(`${appSettings.gatewayUrl}/v1/models`);
-  
+
   return new Promise((resolve) => {
     const req = http.request({
       hostname: url.hostname,
@@ -214,10 +214,42 @@ ipcMain.handle('test-connection', async () => {
 
 ipcMain.handle('open-settings', () => createSettingsWindow());
 
-ipcMain.handle('get-connection-status', () => ({
-  bridge: wsClient && wsClient.readyState === WebSocket.OPEN,
-  gateway: appSettings.gatewayUrl
-}));
+ipcMain.handle('check-for-updates', async () => {
+  try {
+    // Get current commit hash
+    const { exec } = require('child_process');
+    const { promisify } = require('util');
+    const execAsync = promisify(exec);
+    
+    // Get current commit
+    const { stdout: currentHash } = await execAsync('git rev-parse HEAD', { cwd: __dirname });
+    
+    // Fetch latest from remote
+    await execAsync('git fetch origin', { cwd: __dirname });
+    
+    // Get latest commit hash
+    const { stdout: latestHash } = await execAsync('git rev-parse origin/master', { cwd: __dirname });
+    
+    // Check if there are updates
+    const hasUpdates = currentHash.trim() !== latestHash.trim();
+    
+    return {
+      ok: true,
+      hasUpdates,
+      currentHash: currentHash.trim(),
+      latestHash: latestHash.trim()
+    };
+  } catch (error) {
+    return { ok: false, error: error.message };
+  }
+});
+
+ipcMain.handle('enable-auto-update', (event, enabled) => {
+  // Save the auto-update preference
+  appSettings.autoUpdate = enabled;
+  saveSettings();
+  return { ok: true };
+});
 
 app.whenReady().then(() => {
   loadSettings();

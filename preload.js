@@ -11,4 +11,6 @@ contextBridge.exposeInMainWorld('hermes', {
     ipcRenderer.on('bus-event', (event, data) => callback(data));
   },
   openDashboard: () => ipcRenderer.send('open-dashboard'),
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  enableAutoUpdate: (enabled) => ipcRenderer.invoke('enable-auto-update', enabled),
 });
