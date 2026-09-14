@@ -472,6 +472,17 @@ body {
 
 
 /* Pixel-art mascot sprites */
+
+/* Hover effects */
+.mascot:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 30px var(--agent-color);
+  cursor: pointer;
+}
+
+.mascot:hover .mascot-sprite {
+  filter: brightness(1.1);
+}
 .mascot-sprite {
   width: 100%;
   height: 100%;
