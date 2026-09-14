@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/TangledDaunT/Lazy_agents#readme",
   "dependencies": {
-    "electron": "^34.3.0",
+    "electron": "^34.5.8",
     "ws": "^8.18.2"
+  },
+  "allowScripts": {
+    "electron@34.5.8": true
   }
 }
