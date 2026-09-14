@@ -1,8 +1,10 @@
-const AGENTS_URL = '../agents_config.json';
-const BACKEND_HTTP = 'http://localhost:8765';
+const AGENTS_URL = 'agents_config.json';
+const BACKEND_HTTP = 'http://localhost:8766';
 
 let AGENTS = {};
 let orderedIds = [];
+let selectedAgent = 'hermes';
+const $ = (id) => document.getElementById(id);
 
 const MASCOT_SVG = `
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -20,11 +22,15 @@ const SKIN_COLOR = {
 };
 
 async function loadConfig() {
-  const res = await fetch(AGENTS_URL);
-  AGENTS = await res.json();
-  orderedIds = Object.keys(AGENTS);
-  buildGrid();
-  buildInputDock();
+  try {
+    const res = await fetch(AGENTS_URL);
+    AGENTS = await res.json();
+    orderedIds = Object.keys(AGENTS);
+    buildGrid();
+    buildInputDock();
+  } catch (error) {
+    addActivity('Agent configuration could not be loaded', 'error');
+  }
 }
 
 function buildGrid() {
@@ -36,21 +42,31 @@ function buildGrid() {
     const slot = document.createElement('div');
     slot.className = 'agent-slot' + (cfg.position === 'center' ? ' center' : '');
     slot.id = `slot-${id}`;
+    slot.title = `${cfg.displayName}: ${cfg.role}`;
+    slot.addEventListener('click', () => selectAgent(id));
 
     const mascot = document.createElement('div');
     mascot.className = 'mascot idle';
     mascot.id = `mascot-${id}`;
     mascot.style.color = SKIN_COLOR[cfg.defaultSkin] || '#8a86b8';
-    mascot.innerHTML = MASCOT_SVG;
+    mascot.innerHTML = `<span class="avatar-initial">${cfg.displayName.slice(0, 1)}</span>`;
 
     const name = document.createElement('div');
     name.className = 'agent-name';
-    name.textContent = cfg.displayName;
+    name.innerHTML = `<strong>${cfg.displayName}</strong><small>${cfg.role.split(' - ')[0]}</small>`;
 
     slot.appendChild(mascot);
     slot.appendChild(name);
     grid.appendChild(slot);
   }
+}
+
+function selectAgent(agentId) {
+  selectedAgent = agentId;
+  document.querySelectorAll('.agent-slot').forEach((slot) => slot.classList.remove('selected'));
+  $(`slot-${agentId}`)?.classList.add('selected');
+  const select = $('agent-select');
+  if (select) select.value = agentId;
 }
 
 function setState(agentId, state) {
@@ -59,6 +75,25 @@ function setState(agentId, state) {
   if (!el) return;
   el.classList.remove('idle', 'listening', 'working', 'awaiting-approval');
   el.classList.add(state);
+}
+
+function addActivity(message, type = 'info') {
+  const feed = $('activity-feed');
+  if (!feed) return;
+  const item = document.createElement('div');
+  item.className = `activity-item ${type}`;
+  item.textContent = `${message}  ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  feed.prepend(item);
+  while (feed.children.length > 8) feed.lastChild.remove();
+}
+
+function renderOutput(text, replace = false) {
+  const output = $('response-view');
+  if (!output) return;
+  if (replace) output.textContent = '';
+  if (output.querySelector('.muted')) output.textContent = '';
+  output.textContent += text;
+  output.scrollTop = output.scrollHeight;
 }
 
 // ---- Council chain-in-circle ----
@@ -92,18 +127,36 @@ function clearCouncilChain() {
 // ---- Backend event handling ----
 
 window.hermes.onBusEvent((data) => {
+  if (data.type === 'bus-status') {
+    const label = $('connection-label');
+    if (label) {
+      label.textContent = data.connected ? 'ONLINE' : 'OFFLINE';
+      label.classList.toggle('online', data.connected);
+    }
+    return;
+  }
   switch (data.type) {
     case 'wake':               // wake word for an agent detected
       setState(data.agent, 'listening');
+      addActivity(`${AGENTS[data.agent]?.displayName || data.agent} is listening`);
       break;
     case 'agent_working':
       setState(data.agent, 'working');
+      if (data.delta) renderOutput(data.delta);
       break;
     case 'agent_idle':
       setState(data.agent, 'idle');
       break;
     case 'agent_needs_approval':
       setState(data.agent, 'awaiting-approval');
+      break;
+    case 'run_completed':
+      renderOutput(`\n\n${data.output || '(No output returned)'}`);
+      addActivity(`${AGENTS[data.agent]?.displayName || 'Agent'} completed`, 'done');
+      break;
+    case 'run_error':
+      renderOutput(`\n\n${data.error}`, true);
+      addActivity(data.error, 'error');
       break;
     case 'council_start':
       drawCouncilChain(orderedIds.filter((id) => AGENTS[id].position !== 'center'));
@@ -124,7 +177,8 @@ function buildInputDock() {
   const dock = document.getElementById('input-dock');
   dock.innerHTML = '';
 
-  const select = document.createElement('select');
+  const select = document.getElementById('agent-select') || document.createElement('select');
+  select.innerHTML = '';
   for (const id of orderedIds) {
     const opt = document.createElement('option');
     opt.value = id;
@@ -136,22 +190,38 @@ function buildInputDock() {
   councilOpt.textContent = 'AI Council (all agents)';
   select.appendChild(councilOpt);
 
-  const input = document.createElement('input');
-  input.placeholder = 'Type a message, or press Enter to send...';
+  const input = document.getElementById('message-input') || document.createElement('input');
+  input.placeholder = 'Ask the council anything...';
+  const send = document.getElementById('send-btn') || document.createElement('button');
+  send.textContent = 'SEND';
+  send.addEventListener('click', sendMessage);
+  select.addEventListener('change', () => { selectedAgent = select.value; });
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && input.value.trim()) {
-      const target = select.value;
-      window.hermes.sendToAgent(target, input.value.trim());
-      input.value = '';
-    }
+    if (e.key === 'Enter' && input.value.trim()) sendMessage();
   });
 
-  dock.appendChild(select);
-  dock.appendChild(input);
+  if (!document.getElementById('agent-select')) dock.appendChild(select);
+  if (!document.getElementById('message-input')) dock.appendChild(input);
+}
+
+async function sendMessage() {
+  const input = $('message-input');
+  const target = $('agent-select')?.value || selectedAgent;
+  const text = input?.value.trim();
+  if (!text) return;
+  input.value = '';
+  renderOutput(`YOU\n${text}\n\n`, true);
+  addActivity(`Message sent to ${target === '__council__' ? 'the council' : AGENTS[target]?.displayName || target}`, 'sent');
+  const result = await window.hermes.sendToAgent(target, text);
+  if (result?.error) { renderOutput(`Connection error: ${result.error}`, true); addActivity(result.error, 'error'); }
 }
 
 document.getElementById('dashboard-btn').addEventListener('click', () => {
   window.hermes.openDashboard();
+});
+document.getElementById('clear-btn')?.addEventListener('click', () => {
+  $('response-view').innerHTML = '<span class="muted">Your next answer will appear here.</span>';
+  $('activity-feed').innerHTML = '';
 });
 
 // ---- Side panels ----
@@ -169,7 +239,7 @@ async function refreshVault() {
   try {
     const res = await fetch(`${BACKEND_HTTP}/vault`);
     const data = await res.json();
-    document.getElementById('vault-view').textContent = data.files.join('\n');
+    document.getElementById('vault-view').innerHTML = data.files.map((file) => `<div class="file-row">${file}</div>`).join('');
   } catch (e) {
     document.getElementById('vault-view').textContent = '(vault backend not reachable yet)';
   }
