@@ -4,7 +4,7 @@ const SKIN_OPTIONS = ['suit', 'casual', 'beach', 'dress', 'corporate'];
 let AGENTS = {};
 
 async function load() {
-  const res = await fetch('../agents_config.json');
+  const res = await fetch('agents_config.json');
   AGENTS = await res.json();
   render();
 }
