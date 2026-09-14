@@ -20,7 +20,7 @@ function startBackend() {
   pyBridge = spawn(PY, [path.join(PYTHON_DIR, 'hermes_bridge.py')], { stdio: 'inherit' });
   
   // Start the wake word listener (optional, for voice activation)
-  const wakewordPath = path.join(PYTHON_DIR, 'wakeword_listener.py');
+  const wakewordPath = path.join(__dirname, 'wakeword_listener.py');
   if (fs.existsSync(wakewordPath)) {
     pyWakeword = spawn(PY, [wakewordPath], {
       stdio: 'inherit',

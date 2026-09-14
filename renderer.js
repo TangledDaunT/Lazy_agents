@@ -4,30 +4,16 @@ const BACKEND_HTTP = 'http://localhost:8766';
 let AGENTS = {};
 let orderedIds = [];
 let selectedAgent = 'hermes';
+const agentStates = {};
 const $ = (id) => document.getElementById(id);
 
-const MASCOT_SVG = `
-  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="34" r="18" fill="currentColor"/>
-    <path d="M20 90 Q20 55 50 55 Q80 55 80 90 Z" fill="currentColor"/>
-  </svg>`;
-
-// per-skin accent color, standing in for a full outfit layer for now
-const SKIN_COLOR = {
-  suit: '#5b6fa8',
-  casual: '#7fbf8f',
-  beach: '#e8c15a',
-  dress: '#d97fb0',
-  corporate: '#8a86b8',
-};
-
-async function loadConfig() {
+async function loadConfig(refresh = false) {
   try {
-    const res = await fetch(AGENTS_URL);
+    const res = await fetch(`${BACKEND_HTTP}/agents_config?ts=${Date.now()}`).catch(() => fetch(AGENTS_URL));
     AGENTS = await res.json();
     orderedIds = Object.keys(AGENTS);
     buildGrid();
-    buildInputDock();
+    buildInputDock(refresh);
   } catch (error) {
     addActivity('Agent configuration could not be loaded', 'error');
   }
@@ -45,11 +31,12 @@ function buildGrid() {
     slot.title = `${cfg.displayName}: ${cfg.role}`;
     slot.addEventListener('click', () => selectAgent(id));
 
-    const mascot = document.createElement('div');
-    mascot.className = 'mascot idle';
-    mascot.id = `mascot-${id}`;
-    mascot.style.color = SKIN_COLOR[cfg.defaultSkin] || '#8a86b8';
-    mascot.innerHTML = `<span class="avatar-initial">${cfg.displayName.slice(0, 1)}</span>`;
+    const mascot = window.MascotSystem.createMascot({
+      agentId: id,
+      accentColor: cfg.accentColor,
+      outfit: cfg.defaultSkin,
+      state: agentStates[id] || 'idle',
+    });
 
     const name = document.createElement('div');
     name.className = 'agent-name';
@@ -71,10 +58,10 @@ function selectAgent(agentId) {
 
 function setState(agentId, state) {
   // states: idle | listening | working | awaiting-approval
+  agentStates[agentId] = state;
   const el = document.getElementById(`mascot-${agentId}`);
   if (!el) return;
-  el.classList.remove('idle', 'listening', 'working', 'awaiting-approval');
-  el.classList.add(state);
+  window.MascotSystem.setState(el, state);
 }
 
 function addActivity(message, type = 'info') {
@@ -166,6 +153,17 @@ window.hermes.onBusEvent((data) => {
       clearCouncilChain();
       orderedIds.forEach((id) => setState(id, 'idle'));
       break;
+    case 'config_updated':
+      if (data.agents) {
+        AGENTS = data.agents;
+        orderedIds = Object.keys(AGENTS);
+        buildGrid();
+        buildInputDock(true);
+      } else {
+        loadConfig(true);
+      }
+      addActivity('Agent configuration updated', 'done');
+      break;
     default:
       break;
   }
@@ -173,7 +171,7 @@ window.hermes.onBusEvent((data) => {
 
 // ---- Input dock ----
 
-function buildInputDock() {
+function buildInputDock(refresh = false) {
   const dock = document.getElementById('input-dock');
   dock.innerHTML = '';
 
@@ -194,11 +192,14 @@ function buildInputDock() {
   input.placeholder = 'Ask the council anything...';
   const send = document.getElementById('send-btn') || document.createElement('button');
   send.textContent = 'SEND';
-  send.addEventListener('click', sendMessage);
-  select.addEventListener('change', () => { selectedAgent = select.value; });
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && input.value.trim()) sendMessage();
-  });
+  if (!select.dataset.bound) {
+    send.addEventListener('click', sendMessage);
+    select.addEventListener('change', () => { selectedAgent = select.value; });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && input.value.trim()) sendMessage();
+    });
+    select.dataset.bound = 'true';
+  }
 
   if (!document.getElementById('agent-select')) dock.appendChild(select);
   if (!document.getElementById('message-input')) dock.appendChild(input);

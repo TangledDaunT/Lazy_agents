@@ -24,9 +24,9 @@ import numpy as np
 import websockets
 
 HERE = Path(__file__).parent
-CONFIG_PATH = HERE.parent / "agents_config.json"
+CONFIG_PATH = HERE / "agents_config.json"
 WAKEWORD_MODELS_DIR = HERE / "wakeword_models"   # one .onnx/.tflite per agent, see docstring
-BUS_URL = "ws://localhost:8765/bus"
+BUS_URL = "ws://localhost:8766/bus"
 
 with open(CONFIG_PATH) as f:
     AGENTS = json.load(f)

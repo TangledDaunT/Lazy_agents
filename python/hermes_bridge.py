@@ -428,6 +428,10 @@ async def bus(websocket: WebSocket):
             elif msg_type == "ping":
                 # Health check
                 await websocket.send_json({"type": "pong"})
+
+            elif msg_type == "wake":
+                # Relay wake-word detections from the microphone listener to Electron.
+                await broadcast({"type": "wake", "agent": raw.get("agent")})
                 
             elif msg_type == "user_message":
                 # Legacy compatibility: treat as create_run
@@ -462,6 +466,11 @@ async def list_agents():
     return {"agents": list(AGENTS.keys())}
 
 
+@app.get("/agents_config")
+async def get_agents_config():
+    return AGENTS
+
+
 @app.get("/vault")
 async def vault_list():
     if not VAULT_DIR.exists():
@@ -479,6 +488,7 @@ async def update_config(new_config: dict):
     global AGENTS
     AGENTS = new_config
     CONFIG_PATH.write_text(json.dumps(AGENTS, indent=2) + "\n")
+    await broadcast({"type": "config_updated", "agents": AGENTS})
     return {"ok": True}
 
 

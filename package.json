@@ -21,6 +21,8 @@
   "homepage": "https://github.com/TangledDaunT/Lazy_agents#readme",
   "dependencies": {
     "electron": "^34.5.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "ws": "^8.18.2"
   },
   "allowScripts": {
