@@ -87,14 +87,16 @@ def parse_sse_line(line: str) -> Optional[Dict]:
 async def stream_run_events(
     run_id: str,
     session_id: Optional[str] = None,
-    headers: Dict[str, str] = None
+    headers: Dict[str, str] = None,
+    agent_id: Optional[str] = None
 ) -> None:
     """Stream SSE events from a Hermes run and broadcast to websocket clients.
-    
+   
     Args:
         run_id: The run ID to stream events from
         session_id: Optional session ID for session-scoped runs
         headers: Optional additional headers for the request
+        agent_id: Optional agent ID for routing events to correct agent
     """
     stream_url = f"{HERMES_GATEWAY_URL}/v1/runs/{run_id}/events"
     
@@ -151,7 +153,7 @@ async def stream_run_events(
                             if "message.delta" in event_type:
                                 await broadcast({
                                     "type": "agent_working",
-                                    "agent": "hermes",
+                                    "agent": agent_id or "hermes",  # Use the target agent, not hardcoded hermes
                                     "delta": data_obj.get("delta", "")
                                 })
                             elif "run.completed" in event_type:
@@ -159,11 +161,16 @@ async def stream_run_events(
                                     "type": "run_completed",
                                     "run_id": run_id,
                                     "output": data_obj.get("output", ""),
-                                    "agent": "hermes"
+                                    "agent": agent_id or "hermes"
                                 })
                                 await broadcast({
                                     "type": "agent_idle",
-                                    "agent": "hermes"
+                                    "agent": agent_id or "hermes"
+                                })
+                            elif "agent_idle" in event_type or "run.stopped" in event_type:
+                                await broadcast({
+                                    "type": "agent_idle",
+                                    "agent": agent_id or "hermes"
                                 })
                         elif event_buffer:
                             # No event type but have data - broadcast directly
@@ -280,7 +287,7 @@ async def create_run(
     if skills:
         payload["skills"] = skills
 
-    print(f"[DEBUG] Creating run with payload: {payload}", flush=True)
+    print(f"[DEBUG] Creating run with agent_id={agent_id}] Creating run with payload: {payload}", flush=True)
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -299,7 +306,7 @@ async def create_run(
 
             if stream and run_id:
                 # Start streaming events in background
-                asyncio.create_task(stream_run_events(run_id, session_id, headers))
+                asyncio.create_task(stream_run_events(run_id, session_id, headers, agent_id))
 
             return {
                 "run_id": run_id,

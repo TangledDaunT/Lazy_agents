@@ -136,5 +136,17 @@
 
 <script src="mascot.js"></script>
 <script src="renderer.js"></script>
+
+    <script>
+    
+// Add debug logging to sendMessageToAgent
+const originalSendMessageToAgent = window.sendMessageToAgent;
+window.sendMessageToAgent = async function(target, text) {
+    console.log(`[LAZYAGENTS DEBUG] Sending message to agent: ${target}`, text);
+    return originalSendMessageToAgent.call(this, target, text);
+};
+
+    </script>
+
 </body>
 </html>
