@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hermes Dashboard</title>
+<style>
+  body { background:#0a0a12; color:#eee; font-family:-apple-system,sans-serif; padding:20px; }
+  h2 { color:#cfc8ff; margin-bottom:16px; }
+  .row { display:flex; gap:10px; align-items:center; margin-bottom:12px; background:#111022; padding:10px; border-radius:8px; }
+  .row label { width:110px; color:#8a86b8; font-size:12px; }
+  .row input, .row select { flex:1; background:#0a0a12; border:1px solid #2a2748; color:#eee; padding:6px 8px; border-radius:6px; }
+  button { background:#7a5bff; border:none; color:#fff; padding:10px 16px; border-radius:6px; cursor:pointer; margin-top:10px; }
+</style>
+</head>
+<body>
+  <h2>Agent Configuration</h2>
+  <div id="agent-forms"></div>
+  <button id="save-btn">Save</button>
+  <script src="dashboard.js"></script>
+</body>
+</html>

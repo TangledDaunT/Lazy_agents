@@ -1,0 +1,47 @@
+{
+  "hermes": {
+    "displayName": "Hermes",
+    "role": "harness / orchestrator - central node, doesn't hold a domain, routes and moderates council",
+    "position": "center",
+    "wakeWord": "hermes",
+    "piperVoice": "en_US-ryan-high.onnx",
+    "defaultSkin": "corporate",
+    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+  },
+  "coder": {
+    "displayName": "Byte",
+    "role": "coding agent",
+    "position": "top-left",
+    "wakeWord": "byte",
+    "piperVoice": "en_US-danny-low.onnx",
+    "defaultSkin": "casual",
+    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+  },
+  "stocks": {
+    "displayName": "Ledger",
+    "role": "stocks/finance agent",
+    "position": "top-right",
+    "wakeWord": "ledger",
+    "piperVoice": "en_US-kathleen-low.onnx",
+    "defaultSkin": "suit",
+    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+  },
+  "research": {
+    "displayName": "Sage",
+    "role": "research agent",
+    "position": "bottom-left",
+    "wakeWord": "sage",
+    "piperVoice": "en_US-lessac-medium.onnx",
+    "defaultSkin": "corporate",
+    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+  },
+  "planner": {
+    "displayName": "Compass",
+    "role": "planning/scheduling agent",
+    "position": "bottom-right",
+    "piperVoice": "en_US-amy-medium.onnx",
+    "wakeWord": "compass",
+    "defaultSkin": "dress",
+    "skins": ["suit", "casual", "beach", "dress", "corporate"]
+  }
+}

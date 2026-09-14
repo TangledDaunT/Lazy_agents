@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hermes Council</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="stage">
+    <div class="halo"></div>
+
+    <!-- SVG layer for council-mode chain-in-circle connections -->
+    <svg id="chain-layer" class="chain-layer"></svg>
+
+    <div id="agent-grid" class="agent-grid">
+      <!-- populated by renderer.js from agents_config.json -->
+    </div>
+  </div>
+
+  <div class="panel panel-left">
+    <div class="panel-header">Instagram</div>
+    <webview id="ig-webview" src="https://www.instagram.com/" partition="persist:ig"></webview>
+  </div>
+
+  <div class="panel panel-right">
+    <div class="panel-header">
+      <button class="tab active" data-tab="vault">Obsidian Vault</button>
+      <button class="tab" data-tab="sync">Shared Context</button>
+    </div>
+    <div id="vault-view" class="panel-body tab-body active"></div>
+    <div id="sync-view" class="panel-body tab-body"></div>
+  </div>
+
+  <button id="dashboard-btn" class="dashboard-btn" title="Open Dashboard">&#9881;</button>
+
+  <div class="input-dock" id="input-dock"></div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
