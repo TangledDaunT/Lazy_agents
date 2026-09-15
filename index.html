@@ -24,40 +24,6 @@
 </header>
 
 <main id="workspace" class="workspace">
-  <!-- Left Panel - Apps Sidebar -->
-  <aside class="panel panel-left" id="panel-left">
-    <div class="panel-heading">
-      <span id="left-title">APPS</span>
-      <button id="collapse-left" class="collapse-btn">◀</button>
-    </div>
-    
-    <div class="app-switcher">
-      <button class="app-tab active" data-app="instagram">Insta</button>
-      <button class="app-tab" data-app="chatgpt">GPT</button>
-      <button class="app-tab" data-app="claude">Claude</button>
-      <button class="app-tab" data-app="obsidian">Vault</button>
-    </div>
-    
-    <div class="app-container">
-      <webview id="webview-instagram" class="app-webview active" src="https://www.instagram.com/" partition="persist:instagram" useragent="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1" allowpopups></webview>
-      <webview id="webview-chatgpt" class="app-webview" src="https://chat.openai.com/" partition="persist:chatgpt" useragent="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1" allowpopups></webview>
-      <webview id="webview-claude" class="app-webview" src="https://claude.ai/" partition="persist:claude" useragent="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1" allowpopups></webview>
-      <div id="obsidian-view" class="app-webview">
-        <div class="obsidian-header">
-          <h3>📚 Obsidian Vault</h3>
-          <input type="text" id="vault-search" placeholder="Search notes...">
-        </div>
-        <div id="vault-files" class="vault-files"></div>
-        <div id="vault-content" class="vault-content">Select a note to view</div>
-      </div>
-    </div>
-    
-    <div class="activity-section">
-      <div class="panel-heading"><span>FEED</span><span class="live-indicator">●</span></div>
-      <div id="activity-feed" class="activity-feed"></div>
-    </div>
-  </aside>
-
   <!-- Main Stage -->
   <section class="stage">
     <div class="stage-heading">
@@ -76,23 +42,23 @@
       <span id="right-title">OUTPUT</span>
       <button id="collapse-right" class="collapse-btn">▶</button>
     </div>
-    
+
     <div class="tabs">
       <button class="tab active" data-tab="output">Output</button>
       <button class="tab" data-tab="vault">Vault</button>
       <button class="tab" data-tab="context">Context</button>
     </div>
-    
+
     <div id="output-view" class="panel-body tab-body active">
       <div id="response-view" class="response-view">
         <span class="muted">Your conversation will appear here...</span>
       </div>
     </div>
-    
+
     <div id="vault-view" class="panel-body tab-body">
       <div id="vault-tree" class="vault-files"></div>
     </div>
-    
+
     <div id="context-view" class="panel-body tab-body">
       <pre id="shared-context"></pre>
     </div>
@@ -136,17 +102,6 @@
 
 <script src="mascot.js"></script>
 <script src="renderer.js"></script>
-
-    <script>
-    
-// Add debug logging to sendMessageToAgent
-const originalSendMessageToAgent = window.sendMessageToAgent;
-window.sendMessageToAgent = async function(target, text) {
-    console.log(`[LAZYAGENTS DEBUG] Sending message to agent: ${target}`, text);
-    return originalSendMessageToAgent.call(this, target, text);
-};
-
-    </script>
 
 </body>
 </html>
