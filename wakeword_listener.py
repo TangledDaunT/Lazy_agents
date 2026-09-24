@@ -1,81 +1,155 @@
-"""
-Offline, per-agent wake-word detection using openWakeWord.
+"""Local MLX Whisper push-to-talk listener.
 
-IMPORTANT: openWakeWord ships generic pretrained models (hey_jarvis, alexa, etc.)
-but NOT models for arbitrary custom names like "Byte" or "Ledger" out of the box.
-To get wake words that match your agents' actual names you need to either:
-  1. Train a custom model per name with openWakeWord's training notebook
-     (https://github.com/dscripka/openWakeWord - training uses synthetic TTS
-     clips + a small classifier head, doesn't need real recordings), or
-  2. Use Picovoice Porcupine's web console to generate a custom .ppn wake-word
-     file per name (fast, free tier available, no training needed) and swap
-     the detection loop below for Porcupine's SDK instead.
-
-This script assumes option 1 or 2 has produced a model file per agent and just
-wires up the runtime loop + pushes 'wake' events to the orchestrator's /bus.
-
-pip install openwakeword pyaudio websockets
+Audio is captured continuously at 16 kHz mono. A push-to-talk session starts
+on the native key-down event and retains a short tail after key-up so the last
+word is not clipped before Whisper receives the clip.
 """
 import asyncio
 import json
+import os
+import tempfile
+import threading
+import time
+import wave
 from pathlib import Path
 
-import numpy as np
 import websockets
 
 HERE = Path(__file__).parent
-CONFIG_PATH = HERE / "agents_config.json"
-WAKEWORD_MODELS_DIR = HERE / "wakeword_models"   # one .onnx/.tflite per agent, see docstring
-BUS_URL = "ws://localhost:8766/bus"
-
-with open(CONFIG_PATH) as f:
-    AGENTS = json.load(f)
-
-
-async def send_wake(ws, agent_id: str):
-    await ws.send(json.dumps({"type": "wake", "agent": agent_id}))
+BUS_URL = os.environ.get("BRIDGE_URL", "ws://localhost:8766/bus")
+WHISPER_MODEL = os.environ.get("WHISPER_MODEL", "mlx-community/whisper-tiny.en-mlx")
+SAMPLE_RATE = 16000
+TAIL_SECONDS = 0.2
+hotkey_started = threading.Event()
+hotkey_stopped = threading.Event()
+hotkey_lock = threading.Lock()
+session_timestamp = None
 
 
-async def listen_loop():
+def write_wav(path: str, frames: list[bytes]) -> None:
+    with wave.open(path, "wb") as output:
+        output.setnchannels(1)
+        output.setsampwidth(2)
+        output.setframerate(SAMPLE_RATE)
+        output.writeframes(b"".join(frames))
+
+
+def transcribe(path: str) -> str:
+    import mlx_whisper
+
+    started = time.perf_counter()
+    result = mlx_whisper.transcribe(
+        path,
+        path_or_hf_repo=WHISPER_MODEL,
+        language="en",
+        task="transcribe",
+        temperature=0,
+        condition_on_previous_text=False,
+    )
+    elapsed_ms = (time.perf_counter() - started) * 1000
+    text = result.get("text", "").strip()
+    print(
+        f"[wakeword][whisper] model={WHISPER_MODEL} "
+        f"audio_end_to_transcript_ms={elapsed_ms:.1f} text={text!r}",
+        flush=True,
+    )
+    return text
+
+
+def listen() -> tuple[str, bool] | None:
+    import pyaudio
+
+    audio = pyaudio.PyAudio()
+    stream = audio.open(
+        format=pyaudio.paInt16,
+        channels=1,
+        rate=SAMPLE_RATE,
+        input=True,
+        frames_per_buffer=1024,
+    )
+    frames: list[bytes] = []
+    capturing = False
+    stopped_at = 0.0
     try:
-        from openwakeword.model import Model
-        import pyaudio
-    except ImportError:
-        print("[wakeword] openwakeword/pyaudio not installed - skipping wake-word loop.")
-        print("[wakeword] pip install openwakeword pyaudio")
-        return
-
-    # Map agent_id -> path to its trained wake-word model (see module docstring)
-    model_paths = {}
-    for agent_id, cfg in AGENTS.items():
-        candidate = WAKEWORD_MODELS_DIR / f"{cfg.get('wakeWord', agent_id)}.onnx"
-        if candidate.exists():
-            model_paths[agent_id] = str(candidate)
-
-    if not model_paths:
-        print(f"[wakeword] no trained models found in {WAKEWORD_MODELS_DIR}. "
-              f"Wake-word detection is disabled until you add them (see docstring).")
-        return
-
-    oww = Model(wakeword_models=list(model_paths.values()))
-    label_to_agent = {Path(p).stem: a for a, p in model_paths.items()}
-
-    pa = pyaudio.PyAudio()
-    stream = pa.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1280)
-
-    async with websockets.connect(BUS_URL) as ws:
-        print(f"[wakeword] listening for: {list(model_paths.keys())}")
         while True:
-            audio = np.frombuffer(stream.read(1280, exception_on_overflow=False), dtype=np.int16)
-            predictions = oww.predict(audio)
-            for label, score in predictions.items():
-                if score > 0.5:
-                    agent_id = label_to_agent.get(label)
-                    if agent_id:
-                        print(f"[wakeword] heard '{label}' -> {agent_id}")
-                        await send_wake(ws, agent_id)
-            await asyncio.sleep(0.01)
+            data = stream.read(1024, exception_on_overflow=False)
+            now = time.monotonic()
+            if hotkey_started.is_set():
+                hotkey_started.clear()
+                hotkey_stopped.clear()
+                frames = []
+                capturing = True
+                print(f"[wakeword][audio] capture-start monotonic={now:.6f}", flush=True)
+            if capturing:
+                frames.append(data)
+                if hotkey_stopped.is_set():
+                    if not stopped_at:
+                        stopped_at = now
+                    if now - stopped_at >= TAIL_SECONDS:
+                        capturing = False
+                        hotkey_stopped.clear()
+                        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as sample:
+                            sample_path = sample.name
+                        try:
+                            write_wav(sample_path, frames)
+                            text = transcribe(sample_path)
+                        finally:
+                            Path(sample_path).unlink(missing_ok=True)
+                        return text, True
+    finally:
+        stream.stop_stream()
+        stream.close()
+        audio.terminate()
+
+
+async def main():
+    global session_timestamp
+    try:
+        async with websockets.connect(BUS_URL) as ws:
+            async def receive_hotkeys():
+                global session_timestamp
+                async for raw in ws:
+                    try:
+                        event = json.loads(raw)
+                    except json.JSONDecodeError:
+                        continue
+                    if event.get("type") == "voice_hotkey_down":
+                        session_timestamp = event.get("timestamp")
+                        print(f"[wakeword][voice] received voice_hotkey_down at {time.time():.6f}", flush=True)
+                        hotkey_started.set()
+                    elif event.get("type") == "voice_hotkey_up":
+                        print(
+                            f"[wakeword][voice] received voice_hotkey_up at {time.time():.6f} "
+                            f"t0={event.get('timestamp')}",
+                            flush=True,
+                        )
+                        hotkey_stopped.set()
+
+            receiver = asyncio.create_task(receive_hotkeys())
+            while True:
+                loop = asyncio.get_running_loop()
+                try:
+                    result = await loop.run_in_executor(None, listen)
+                except Exception as error:
+                    print(f"[wakeword] capture/transcription error: {error}", flush=True)
+                    await asyncio.sleep(0.2)
+                    continue
+                if result:
+                    command, is_final = result
+                    print(
+                        f"[wakeword][voice] Whisper final at {time.time():.6f}: {command!r}",
+                        flush=True,
+                    )
+                    await ws.send(json.dumps({"type": "wake", "agent": "query"}))
+                    if command:
+                        await ws.send(json.dumps({
+                            "type": "voice_transcript" if is_final else "partial_transcript",
+                            "text": command,
+                        }))
+            receiver.cancel()
+    except (OSError, websockets.WebSocketException, ImportError) as error:
+        print(f"[wakeword] listener stopped: {error}", flush=True)
 
 
 if __name__ == "__main__":
-    asyncio.run(listen_loop())
+    asyncio.run(main())

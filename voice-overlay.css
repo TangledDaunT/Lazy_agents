@@ -1,0 +1,11 @@
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+body { display: grid; place-items: center; font: 14px -apple-system, BlinkMacSystemFont, sans-serif; color: #eef6ff; }
+#orb { width: 60px; height: 43px; border-radius: 22px; background: rgba(20,20,20,.55); opacity: .5; box-shadow: inset 0 1px rgba(255,255,255,.12); transition: width .18s ease, height .18s ease, opacity .18s ease, background .18s ease; display: grid; place-items: center; position: relative; }
+#orb.listening, #orb.running, #orb.error { width: 360px; height: 48px; opacity: .96; }
+#orb.listening, #orb.running { background: rgba(20,20,20,.78); }
+#orb.error { background: rgba(92,32,38,.78); }
+#orb.running::before { content: ''; width: 6px; height: 6px; margin-right: 8px; border-radius: 50%; background: rgba(255,255,255,.8); animation: pulse 1s ease-in-out infinite; }
+#wave { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .85; }
+#transcript { position: relative; max-width: 270px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 0 56px 0 18px; font-size: 12px; color: rgba(255,255,255,.86); }
+#correction { display: none; }
+@keyframes pulse { 50% { opacity: .3; transform: scale(.7); } }

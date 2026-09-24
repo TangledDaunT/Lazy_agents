@@ -40,6 +40,7 @@ except FileNotFoundError:
 
 app = FastAPI()
 bus_clients: List[WebSocket] = []
+voice_hotkey_state: Optional[dict] = None
 
 
 async def broadcast(event: dict):
@@ -395,8 +396,11 @@ async def bus(websocket: WebSocket):
         - get_status: Get run status
         - ping: Health check
     """
+    global voice_hotkey_state
     await websocket.accept()
     bus_clients.append(websocket)
+    if voice_hotkey_state:
+        await websocket.send_json(voice_hotkey_state)
     
     try:
         while True:
@@ -444,6 +448,15 @@ async def bus(websocket: WebSocket):
             elif msg_type == "wake":
                 # Relay wake-word detections from the microphone listener to Electron.
                 await broadcast({"type": "wake", "agent": raw.get("agent")})
+
+            elif msg_type == "voice_transcript":
+                # Relay the captured Query utterance to Electron's voice router.
+                await broadcast({"type": "voice_transcript", "text": raw.get("text", "")})
+
+            elif msg_type in ("voice_hotkey_down", "voice_hotkey_up"):
+                print(f"[bridge][voice] received {msg_type}", flush=True)
+                voice_hotkey_state = {"type": msg_type, "timestamp": raw.get("timestamp")}
+                await broadcast(voice_hotkey_state)
                 
             elif msg_type == "user_message":
                 # Legacy compatibility: treat as create_run

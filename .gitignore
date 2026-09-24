@@ -7,3 +7,11 @@ python/voices/
 python/wakeword_models/
 shared_context.md
 vault_placeholder/
+runs/
+*.db
+*.db-shm
+*.db-wal
+kev/.venv/
+vosk_model/
+models/*.onnx
+models/*.onnx.json

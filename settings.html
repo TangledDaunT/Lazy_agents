@@ -216,10 +216,20 @@
   
   <div class="field">
     <label class="checkbox-label">
-      <input type="checkbox" id="wakeWord">
-      <span>Enable wake word detection</span>
+      <input type="checkbox" id="wakeWord" checked disabled>
+      <span>“Query” wake word detection (always enabled)</span>
     </label>
-    <p class="hint">Requires Porcupine/Picovoice setup (see documentation)</p>
+    <p class="hint">Starts automatically after Kev passes its health check. See documentation for microphone permissions.</p>
+  </div>
+  <div class="field">
+    <label for="kevRun">Kev checkpoint path</label>
+    <input type="text" id="kevRun" placeholder="runs/kev-router">
+    <p class="hint">Local fine-tuned checkpoint; weights are not stored in Git.</p>
+  </div>
+  <div class="field">
+    <label for="voicePiperModel">Query confirmation Piper model</label>
+    <input type="text" id="voicePiperModel" placeholder="/path/to/en_GB-female.onnx">
+    <p class="hint">Default: local en_GB-alba-medium. No cloud TTS is used.</p>
   </div>
 </section>
 
@@ -286,7 +296,9 @@ async function load() {
     $('apiKey').value = settings.apiKey || '';
     $('bridgePort').value = settings.bridgePort || 8766;
     $('autoStart').checked = settings.autoStart;
-    $('wakeWord').checked = settings.wakeWord;
+    $('wakeWord').checked = true;
+    $('kevRun').value = settings.kevRun || '';
+    $('voicePiperModel').value = settings.voicePiperModel || '';
     $('debug').checked = settings.debug;
     $('vaultPath').value = settings.vaultPath || '';
     
@@ -319,7 +331,9 @@ async function save() {
       apiKey: $('apiKey').value,
       bridgePort: parseInt($('bridgePort').value),
       autoStart: $('autoStart').checked,
-      wakeWord: $('wakeWord').checked,
+      wakeWord: true,
+      kevRun: $('kevRun').value,
+      voicePiperModel: $('voicePiperModel').value,
       debug: $('debug').checked,
       vaultPath: $('vaultPath').value
     });
